@@ -2,17 +2,19 @@ import pandas as pd
 import datetime
 
 
-#a1 = [1,2,3,4]
-#b1 = [1,2,3,4]
-#df = pd.DataFrame({'a2': a1, 'b2': b1})
-#df.to_excel('test.xlsx', sheet_name='sheet1', index=False)
-
 #row 14 is starting row
 #1-17
 
 df1 = pd.read_excel('data/SQ2024-1450 CAT SC_LCF Summary Data (100924).xlsx', sheet_name='Report Tables', keep_default_na=False)
+df2 = pd.read_excel('data/SQ2024-1450 CAT SC_LCF Summary Data (100924).xlsx', sheet_name='Report Tables', keep_default_na=False)
 collist = list(df1)
+df3 = pd.read_excel('data/SQ2024-1450 CAT SC_LCF Summary Data (100924).xlsx',
+                     sheet_name='Report Tables', keep_default_na=False,usecols="C" ,skiprows=[0,1,2,3,4,5,6,7,8])
 
+#print(df2)
+example = df2.loc[12:23, 'Unnamed: 1':]
+example.rename(index = mapper, axis=0)
+print(example)
 
 nums = [x for x in range(len(collist))]
 print(nums)
@@ -38,13 +40,10 @@ col14 = df1.loc[:,"Unnamed: 14"]
 col15 = df1.loc[:,"Unnamed: 15"]
 col16 = df1.loc[:,"Unnamed: 16"]
 col17 = df1.loc[:,"Unnamed: 17"]"""
-#print(df1)
 
-#colrange = df1.iloc[:, : 50]
+
 #colrange = df1[df1.columns[15:18]]
 #print(colrange)
-
-#print(list(df1))
 
 col17 = df1.loc[12:23,17] # start date
 col18 = df1.loc[12:23,18] # end date
@@ -66,4 +65,7 @@ datetimefix(col18)
 with pd.ExcelWriter("test.xlsx", date_format="YYYY-MM-DD") as writer:
     df1.to_excel(writer)  
 
+
+with pd.ExcelWriter("test2.xlsx") as writer:
+    example.to_excel(writer)
 
