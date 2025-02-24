@@ -13,11 +13,12 @@ df3 = pd.read_excel('data/SQ2024-1450 CAT SC_LCF Summary Data (100924).xlsx',
 
 #print(df2)
 example = df2.loc[12:23, 'Unnamed: 1':]
-example.rename(index = mapper, axis=0)
+example = example.reset_index(drop = True)
 print(example)
 
 nums = [x for x in range(len(collist))]
-print(nums)
+
+#print(nums)
 
 df1.columns = nums
 
