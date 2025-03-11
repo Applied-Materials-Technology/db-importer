@@ -35,41 +35,10 @@ example = df2.loc[12:23, 'Unnamed: 1':] # takes values WITHOUT name of columns
 example = example.reset_index(drop = True) # starts new row index at 1
 example.columns = namelist # renames the columns to the original name (but one line)
 
-# old example of renaming the columns to be numbers
-#collist2 = list(example)
-#nums2 = [x for x in range(len(collist2))]
-#example.columns = nums2
-
-#testcol17 = df2.loc[12:23,17] # start date
-#testcol18 = df2.loc[12:23,18] # end date
-
-#datetimefix(testcol17)
-#datetimefix(testcol18)
 
 with pd.ExcelWriter("test2.xlsx") as writer:
     example.to_excel(writer)
 
-"""
-col1 = df1.loc[:,"Unnamed: 1"]
-col2 = df1.loc[:,"Unnamed: 2"]
-col3 = df1.loc[:,"Unnamed: 3"]
-col4 = df1.loc[:,"Unnamed: 4"]
-col5 = df1.loc[:,"Unnamed: 5"]
-col6 = df1.loc[:,"Unnamed: 6"]
-col7 = df1.loc[:,"Unnamed: 7"]
-col8 = df1.loc[:,"Unnamed: 8"]
-col9 = df1.loc[:,"Unnamed: 9"]
-col10 = df1.loc[:,"Unnamed: 10"]
-col11 = df1.loc[:,"Unnamed: 11"]
-col12 = df1.loc[:,"Unnamed: 12"]
-col13 = df1.loc[:,"Unnamed: 13"]
-col14 = df1.loc[:,"Unnamed: 14"]
-col15 = df1.loc[:,"Unnamed: 15"]
-col16 = df1.loc[:,"Unnamed: 16"]
-col17 = df1.loc[:,"Unnamed: 17"]"""
-
-
-#colrange = df1[df1.columns[15:18]]
 
 col17 = df1.loc[12:23,17] # start date
 col18 = df1.loc[12:23,18] # end date
@@ -84,3 +53,14 @@ with pd.ExcelWriter("test.xlsx", date_format="YYYY-MM-DD") as writer:
 
 
 
+# Define a search function
+def search_string(s, search):
+    return search in str(s)
+
+# should return only the row with rt01
+mask = df2.apply(lambda x: x.map(lambda s: search_string(s, 'RT01')))
+
+
+# Filter the DataFrame based on the mask
+filtered_df = df2.loc[mask.any(axis=1)]
+print(filtered_df)
