@@ -7,20 +7,20 @@ import datetime
 
 df1 = pd.read_excel('data/SQ2024-1450 CAT SC_LCF Summary Data (100924).xlsx', sheet_name='Report Tables', keep_default_na=False)
 df2 = pd.read_excel('data/SQ2024-1450 CAT SC_LCF Summary Data (100924).xlsx', sheet_name='Report Tables', keep_default_na=False)
-collist = list(df1)
 df3 = pd.read_excel('data/SQ2024-1450 CAT SC_LCF Summary Data (100924).xlsx',
                      sheet_name='Report Tables', keep_default_na=False,usecols="C" ,skiprows=[0,1,2,3,4,5,6,7,8])
 
-#print(df2)
-example = df2.loc[12:23, 'Unnamed: 1':]
-example = example.reset_index(drop = True)
-print(example)
 
+collist = list(df1)
 nums = [x for x in range(len(collist))]
-
-#print(nums)
-
 df1.columns = nums
+
+example = df2.loc[11:23, 'Unnamed: 1':]
+example = example.reset_index(drop = True)
+collist2 = list(example)
+nums2 = [x for x in range(len(collist2))]
+example.columns = nums2
+
 
 
 """
