@@ -35,7 +35,7 @@ example = df2.loc[12:23, 'Unnamed: 1':] # takes values WITHOUT name of columns
 example = example.reset_index(drop = True) # starts new row index at 1
 example.columns = namelist # renames the columns to the original name (but one line)
 
-
+#NEWER EXAMPLE
 with pd.ExcelWriter("test2.xlsx") as writer:
     example.to_excel(writer)
 
@@ -47,20 +47,32 @@ col18 = df1.loc[12:23,18] # end date
 datetimefix(col17)
 datetimefix(col18)
 
-
+#OLD EXAMPLE
 with pd.ExcelWriter("test.xlsx", date_format="YYYY-MM-DD") as writer:
     df1.to_excel(writer)  
 
 
-
+#mystring = 'RT01'
+#mystring = 'SMaRT Contract Number:'
+mystring = 'SMaRT Programme Owner:' 
+#SMaRT Programme Owner string works but the SMaRT Contract Number string doesn't
 # Define a search function
 def search_string(s, search):
     return search in str(s)
 
 # should return only the row with rt01
-mask = df2.apply(lambda x: x.map(lambda s: search_string(s, 'RT01')))
+mask = df2.apply(lambda x: x.map(lambda s: search_string(s,mystring)))
 
 
 # Filter the DataFrame based on the mask
 filtered_df = df2.loc[mask.any(axis=1)]
-print(filtered_df)
+#print(filtered_df)
+
+#print(df2.at[1, 'id'])
+
+mask2 = df1.apply(lambda x: x.map(lambda s: search_string(s,mystring)))
+
+
+# Filter the DataFrame based on the mask
+filtered_df2 = df1.loc[mask2.any(axis=1)]
+print(filtered_df2)
