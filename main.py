@@ -68,11 +68,10 @@ mask = df2.apply(lambda x: x.map(lambda s: search_string(s,mystring)))
 filtered_df = df2.loc[mask.any(axis=1)]
 #print(filtered_df)
 
-#print(df2.at[1, 'id'])
 
-mask2 = df1.apply(lambda x: x.map(lambda s: search_string(s,mystring)))
+print(df2.iat[0,12])
+print(df2.iat[0,15])
 
-
-# Filter the DataFrame based on the mask
-filtered_df2 = df1.loc[mask2.any(axis=1)]
-print(filtered_df2)
+#gives project manager and name
+print(df2.iat[1,12])
+print(df2.iat[1,15])
