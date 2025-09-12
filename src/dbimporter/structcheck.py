@@ -11,85 +11,97 @@ issues = Issues()
 testfile = "data/baddata.xlsx"
 skeleton = "data/importfileskel.xlsx"
 
-def read_data(filename):
-    """
-    Read from excel file to check and return dict of sheetname: sheet_data
-    """
-    df = pd.ExcelFile(filename)
+issues2 = Issues()
+class Check():
 
-    check_sheets(df.sheet_names)
+    def __init__(self,
+                 filename: str = None,
+                 issues = Issues()):
+        
+        self.filename = filename
+        self.issues = issues
 
-    sheets = {}
-    for i in df.sheet_names:
-        sheets[i] = df.parse(i)
+        self.start(self.filename)
 
-    return sheets
 
-def read_columns(column, sheet_data):
-    """
-    Read the name of the columns in a given sheet
-    """
-    columnnames = sheet_data.iloc[column]
-    columnlist = []
-    for i in columnnames:
-        columnlist.append(i)
+    def read_data(self, filename):
+        """
+        Read from excel file to check and return dict of sheetname: sheet_data
+        """
+        df = pd.ExcelFile(self.filename)
 
-    return columnlist
+        self.check_sheets(df.sheet_names)
 
-def check_sheets(sheet_names):
-    """
-    Check if the sheets are the expected names, and check box if correct
-    """
-    if sheet_names == ExpectedStruct.sheet_names:
-        issues.sheet_names = True
-    elif sheet_names != ExpectedStruct.sheet_names:
-        issues.sheet_names = False
-    else:
-        logger.error("Sheets name check could not be determined")
-        issues.sheet_names = False
+        sheets = {}
+        for i in df.sheet_names:
+            sheets[i] = df.parse(i)
 
-def check_column_names(column_names, sheet_data):
-    """
-    Check if the columns are the expected names, and check box if correct
-    """
-    if column_names == sheet_data:
-        issues.sheet1_columns = True
-    elif column_names != sheet_data:
-        issues.sheet1_columns = False
-    else:
-        logger.error("Column name check could not be determined")
-        issues.sheet1_columns = False
+        return sheets
 
-def check_units(unitlist):
-    """
-    Check if the columns are the expected names, and check box if correct
-    """
-    checknan = np.isnan(unitlist).any()#does not work...
-    if checknan == True:
-        issues.units = False
-    elif checknan == False:
-        issues.units == True
-    else:
-        logger.error("Unit existence check could not be determined")
-        issues.units = False
+    def read_columns(self, column, sheet_data):
+        """
+        Read the name of the columns in a given sheet
+        """
+        columnnames = sheet_data.iloc[column]
+        columnlist = []
+        for i in columnnames:
+            columnlist.append(i)
 
-def start(filename):
+        return columnlist
 
-    sheets_data = read_data(filename)
+    def check_sheets(self, sheet_names):
+        """
+        Check if the sheets are the expected names, and check box if correct
+        """
+        if sheet_names == ExpectedStruct.sheet_names:
+            self.issues.sheet_names = True
+        elif sheet_names != ExpectedStruct.sheet_names:
+            self.issues.sheet_names = False
+        else:
+            logger.error("Sheets name check could not be determined")
+            self.issues.sheet_names = False
 
-    column_names1 = read_columns(0, sheets_data["Sheet1"])
+    def check_column_names(self, column_names, sheet_data):
+        """
+        Check if the columns are the expected names, and check box if correct
+        """
+        if column_names == sheet_data:
+            self.issues.sheet1_columns = True
+        elif column_names != sheet_data:
+            self.issues.sheet1_columns = False
+        else:
+            logger.error("Column name check could not be determined")
+            self.issues.sheet1_columns = False
 
-    check_column_names(column_names1, ExpectedStruct.sheet_1_columns)
+    def check_units(self, unitlist):
+        """
+        Check if the columns are the expected names, and check box if correct
+        """
+        checknan = np.isnan(unitlist).any()#does not work...
+        if checknan == True:
+            self.issues.units = False
+        elif checknan == False:
+            self.issues.units == True
+        else:
+            logger.error("Unit existence check could not be determined")
+            self.issues.units = False
 
-    unit_check = read_columns(1, sheets_data["Sheet1"])
-    #check_units(unit_check)
+    def start(self, filename):
 
-def write_results():
-    with open("output.txt", "w") as f:
-        for i in issues.__dict__:
-            f.write(i+": "+str(issues.__dict__[i])+"\n")
-        f.close()
+        sheets_data = self.read_data(filename)
 
-#start(testfile)
-print(issues.__dict__)
-write_results()
+        column_names1 = self.read_columns(0, sheets_data["Sheet1"])
+
+        self.check_column_names(column_names1, ExpectedStruct.sheet_1_columns)
+
+        unit_check = self.read_columns(1, sheets_data["Sheet1"])
+
+        self.write_results()
+
+
+    def write_results(self):
+        with open("output.txt", "w") as f:
+            for i in self.issues.__dict__:
+                f.write(i+": "+str(self.issues.__dict__[i])+"\n")
+            f.close()
+
