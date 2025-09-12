@@ -1,8 +1,10 @@
 import pandas as pd
 import datetime
-from expecteddata import ExpectedStruct
-from logger import logger
-from issuetracker import Issues
+from dbimporter.expecteddata import ExpectedStruct
+from dbimporter.logger import logger
+from dbimporter.issuetracker import Issues
+import numpy as np
+import json
 
 issues = Issues()
 
@@ -23,11 +25,11 @@ def read_data(filename):
 
     return sheets
 
-def read_columns(sheet_data):
+def read_columns(column, sheet_data):
     """
     Read the name of the columns in a given sheet
     """
-    columnnames = sheet_data.iloc[0]
+    columnnames = sheet_data.iloc[column]
     columnlist = []
     for i in columnnames:
         columnlist.append(i)
@@ -58,13 +60,36 @@ def check_column_names(column_names, sheet_data):
         logger.error("Column name check could not be determined")
         issues.sheet1_columns = False
 
+def check_units(unitlist):
+    """
+    Check if the columns are the expected names, and check box if correct
+    """
+    checknan = np.isnan(unitlist).any()#does not work...
+    if checknan == True:
+        issues.units = False
+    elif checknan == False:
+        issues.units == True
+    else:
+        logger.error("Unit existence check could not be determined")
+        issues.units = False
+
 def start(filename):
 
     sheets_data = read_data(filename)
 
-    column_names = read_columns(sheets_data["Sheet1"])
+    column_names1 = read_columns(0, sheets_data["Sheet1"])
 
-    check_column_names(column_names, ExpectedStruct.sheet_1_columns)
+    check_column_names(column_names1, ExpectedStruct.sheet_1_columns)
 
-start(testfile)
+    unit_check = read_columns(1, sheets_data["Sheet1"])
+    #check_units(unit_check)
+
+def write_results():
+    with open("output.txt", "w") as f:
+        for i in issues.__dict__:
+            f.write(i+": "+str(issues.__dict__[i])+"\n")
+        f.close()
+
+#start(testfile)
 print(issues.__dict__)
+write_results()
