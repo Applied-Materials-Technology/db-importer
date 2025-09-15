@@ -5,13 +5,8 @@ from dbimporter.logger import logger
 from dbimporter.issuetracker import Issues
 import numpy as np
 import json
+import math
 
-issues = Issues()
-
-testfile = "data/baddata.xlsx"
-skeleton = "data/importfileskel.xlsx"
-
-issues2 = Issues()
 class Check():
 
     def __init__(self,
@@ -74,20 +69,34 @@ class Check():
             logger.error("Column name check could not be determined")
             self.issues.sheet1_columns = False
 
-    def check_units(self, unitlist):
+    def check_units(self, unitlist, columnname):
         """
         Check if the columns are the expected names, and check box if correct
         """
-        checknan = np.isnan(unitlist).any()#does not work...
+
+        checknan_list = pd.Series(unitlist).isnull()
+
+        for i in range(len(checknan_list)):
+            if checknan_list[i] == True:
+                checknan = True
+                wrong_column = columnname[i]
+                error_msg = f"The column {wrong_column} has no units"
+                logger.error(error_msg)
+            else:
+                continue
+
         if checknan == True:
             self.issues.units = False
         elif checknan == False:
-            self.issues.units == True
+            self.issues.units = True
         else:
             logger.error("Unit existence check could not be determined")
             self.issues.units = False
 
     def start(self, filename):
+        """
+        Start the checks
+        """
 
         sheets_data = self.read_data(filename)
 
@@ -96,11 +105,16 @@ class Check():
         self.check_column_names(column_names1, ExpectedStruct.sheet_1_columns)
 
         unit_check = self.read_columns(1, sheets_data["Sheet1"])
+        
+        self.check_units(unit_check, column_names1)
 
         self.write_results()
 
 
     def write_results(self):
+        """
+        Write the results of the issue tracker class to a text file
+        """
         with open("output.txt", "w") as f:
             for i in self.issues.__dict__:
                 f.write(i+": "+str(self.issues.__dict__[i])+"\n")
