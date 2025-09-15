@@ -56,6 +56,7 @@ class Check():
         if sheet_names == ExpectedStruct.sheet_names:
             self.issues.sheet_names = True
         elif sheet_names != ExpectedStruct.sheet_names:
+            logger.error("Sheets name incorrect")
             self.issues.sheet_names = False
         else:
             logger.error("Sheets name check could not be determined")

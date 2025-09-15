@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dbimporter"
+version = "0.0.1"
+description = "A tool for handling databases"
+authors = [
+  { name = "meganasampson", email = "megan.sampson@ukaea.uk" },
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: GNU LGPL",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.10"
+dependencies = [
+  "pandas>=2.2.3",
+]
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
