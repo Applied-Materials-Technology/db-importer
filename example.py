@@ -1,3 +1,4 @@
-import dbimporter
+import dbimporter as dbi
 
-dbimporter.structcheck.Check(filename="src/dbimporter/data/baddata.xlsx")
+dbi.structcheck.Check(filename="src/dbimporter/data/baddata.xlsx")
+#dbi.structcheck.Check(filename="src/dbimporter/data/realdataex.xlsx")

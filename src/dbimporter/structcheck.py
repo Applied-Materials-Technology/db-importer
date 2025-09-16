@@ -26,12 +26,12 @@ class Check():
         df = pd.ExcelFile(self.filename)
 
         self.check_sheets(df.sheet_names)
-
+        print(df.sheet_names)
         sheets = {}
         for i in df.sheet_names:
             sheets[i] = df.parse(i)
 
-        return sheets
+        return df.sheet_names, sheets
 
     def read_columns(self, column, sheet_data):
         """
@@ -74,6 +74,8 @@ class Check():
         Check if the columns are the expected names, and check box if correct
         """
 
+        checknan = False
+
         checknan_list = pd.Series(unitlist).isnull()
 
         for i in range(len(checknan_list)):
@@ -93,18 +95,24 @@ class Check():
             logger.error("Unit existence check could not be determined")
             self.issues.units = False
 
+    def split_sheet_data(self, sheet_data):
+        pass
+
     def start(self, filename):
         """
         Start the checks
         """
 
-        sheets_data = self.read_data(filename)
+        sheet_names, sheets_data = self.read_data(filename)
+        print(sheet_names[0])
 
-        column_names1 = self.read_columns(0, sheets_data["Sheet1"])
+        #column_names1 = self.read_columns(0, sheets_data["Sheet1"])
+        column_names1 = self.read_columns(0, sheets_data[sheet_names[0]])
 
         self.check_column_names(column_names1, ExpectedStruct.sheet_1_columns)
 
-        unit_check = self.read_columns(1, sheets_data["Sheet1"])
+        #unit_check = self.read_columns(1, sheets_data["Sheet1"])
+        unit_check = self.read_columns(1, sheets_data[sheet_names[0]])
         
         self.check_units(unit_check, column_names1)
 
