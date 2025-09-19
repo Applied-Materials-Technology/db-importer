@@ -11,7 +11,7 @@ def read_data(filename):
 
     return data, headers
 
-data, headers = read_data('data/realdataex.xlsx')
+#data, headers = read_data('data/realdataex.xlsx')
 
 def get_units(headers):
     """
@@ -49,5 +49,5 @@ def write_new_data(data):
 def test():
     print("module found")
 
-unit_struc = write_units()
-write_new_data(unit_struc)
+#unit_struc = write_units()
+#write_new_data(unit_struc)
