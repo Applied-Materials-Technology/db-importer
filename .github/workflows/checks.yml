@@ -1,0 +1,21 @@
+---
+
+name: Checks
+
+on: [push]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Get pytest
+        run: pip3 install pytest
+      - name: Get package
+        run: pip3 install -e .
+      - name: Test
+        run: pytest -v tests/.
