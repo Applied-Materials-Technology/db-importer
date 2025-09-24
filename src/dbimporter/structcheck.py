@@ -1,22 +1,28 @@
 import pandas as pd
-import datetime
-from dbimporter.expecteddata import ExpectedStruct
-from dbimporter.logger import logger
-from dbimporter.issuetracker import Issues
-import numpy as np
 import json
-import math
+import sys
+from dbimporter.logger import logger, change_logging_level
+from dbimporter.expecteddata import ExpectedStruct
+from dbimporter.issuetracker import Issues
 
 class Check():
 
     def __init__(self,
                  filename: str = None,
+                 console_loglevel: int = 0,
+                 file_loglevel: int = 10,
                  issues = Issues(),
                  expected_structure = ExpectedStruct()):
         
         self.filename = filename
+        self.console_loglevel = console_loglevel
+        self.file_loglevel = file_loglevel
         self.issues = issues
         self.expected_structure = expected_structure
+
+        if self.file_loglevel > 30:
+            print("Log file must be set to severity threshold 30 or lower")
+            sys.exit()
 
         self.start(self.filename)
 
@@ -202,6 +208,8 @@ class Check():
             filename: str
                 Path to excel file to be checked for importing
         """
+
+        change_logging_level(self.console_loglevel, self.file_loglevel)
 
         sheet_names, sheets_data = self.read_data(filename)
 
