@@ -48,6 +48,7 @@ def write_new_data(data):
 
 def test():
     print("module found")
+    return True
 
 def start(filename):
     print("starting")
