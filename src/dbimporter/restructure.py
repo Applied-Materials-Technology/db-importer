@@ -31,7 +31,7 @@ def get_units(headers):
 
     return units
 
-def write_units(units=None):
+def write_units(headers, data, units=None):
     """
     Write the units to the first row of the new dataframe
     """
@@ -48,6 +48,15 @@ def write_new_data(data):
 
 def test():
     print("module found")
+
+def start(filename):
+    print("starting")
+    data, headers = read_data(filename)
+    new_df = write_units(headers, data)
+    write_new_data(new_df)
+
+#start('data/realdataex.xlsx')
+#start('src/dbimporter/data/realdataex.xlsx')
 
 #unit_struc = write_units()
 #write_new_data(unit_struc)

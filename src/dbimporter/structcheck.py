@@ -4,6 +4,7 @@ import sys
 from dbimporter.logger import logger, change_logging_level
 from dbimporter.expecteddata import ExpectedStruct
 from dbimporter.issuetracker import Issues
+from dbimporter.restructure import *
 
 class Check():
 
@@ -238,5 +239,24 @@ class Check():
                 f.write(i+": "+str(self.issues.__dict__[i])+"\n")
             f.close()
 
-        print("******* output.txt generated for overview results *******")
-        print("******* See example.log for details about report *******")
+        self.output_message()
+
+    def output_message(self):
+        """
+        Give results of check and ask to resolve issues
+        """
+
+        attrs = (getattr(self.issues, i) for i in self.issues.__dict__)
+
+        if all(attrs) == False:
+            print("******* output.txt generated for overview results *******")
+            print("******* See example.log for details about report *******")
+            runrestruct = input("******* Attempt to run restructure to automatically fix issues? Y/N*******").upper()
+
+            if runrestruct == "Y":
+                print("Attempting to resolve issues automatically...")
+            else:
+                print("Please correct issues manually and try again")
+        else:
+            print("No issues found")
+            print("May proceed to ingestion attempt")
