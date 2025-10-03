@@ -16,8 +16,9 @@ class Check():
                  expected_structure = ExpectedStruct()):
         
         self.filename = filename
-        self.console_loglevel = console_loglevel
-        self.file_loglevel = file_loglevel
+        self.console_loglevel = self.loglevelcheck(console_loglevel)
+        #self.file_loglevel = file_loglevel
+        self.file_loglevel = self.loglevelcheck(file_loglevel)
         self.issues = issues
         self.expected_structure = expected_structure
 
@@ -32,7 +33,9 @@ class Check():
         logging_list = [0,10,20,30,40,50,60]
         if loglevel not in logging_list:
             print("logging level must be a valid level")
+            raise Exception(ValueError)
             sys.exit()
+        return loglevel
 
     def read_data(self, 
                   filename: str):
@@ -263,6 +266,7 @@ class Check():
             print("******* See example.log for details about report *******")
             print("******* Attempting to resolve issues automatically... *******")
 
+            #run restructure and rerun checker
             #if failed:
             print("******* Could not resolve... *******")#fake
             print("Please correct issues manually and try again")
