@@ -6,8 +6,9 @@ def test_find_module(mocker):
     modulefound = dbi.test()
     assert modulefound == True
 
-"""
-class TestClass:
+
+class TestCheck:
+
     check = dbi.structcheck.Check(filename="src/dbimporter/data/baddata.xlsx")
 
     def test_filename_exists(self):
@@ -23,5 +24,8 @@ class TestClass:
         assert hasattr(self.check, "issues")
 
     def test_expected_structure_exists(self):
-        assert hasattr(self.check, "expected_structure")"""
+        assert hasattr(self.check, "expected_structure")
+
+
+
 

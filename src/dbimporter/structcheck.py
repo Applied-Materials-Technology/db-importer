@@ -27,6 +27,12 @@ class Check():
 
         self.start(self.filename)
 
+    def loglevelcheck(self, loglevel):
+        #eventually allow for word levels...
+        logging_list = [0,10,20,30,40,50,60]
+        if loglevel not in logging_list:
+            print("logging level must be a valid level")
+            sys.exit()
 
     def read_data(self, 
                   filename: str):
@@ -214,15 +220,19 @@ class Check():
 
         sheet_names, sheets_data = self.read_data(filename)
 
-        for i in sheet_names:
+        for i in sheet_names:         
 
             data_column_name = self.read_columns(0, sheets_data[i])
+            print(f"column names are {data_column_name}")
             expect_col_names = getattr(self.expected_structure, i)
             self.check_column_names(data_column_name, expect_col_names, i)
 
             try:
                 unit_check = self.read_columns(1, sheets_data[i])
                 self.check_units_nan(data_column_name, unit_check, i)
+                unit_data = sheets_data[i].set_index(['Category'])
+                units = [k for k in unit_data.xs("Unit")]
+                print(units)
             except:
                 logger.error(f"Units could not be found in sheet {i}")
 
@@ -251,12 +261,11 @@ class Check():
         if all(attrs) == False:
             print("******* output.txt generated for overview results *******")
             print("******* See example.log for details about report *******")
-            runrestruct = input("******* Attempt to run restructure to automatically fix issues? Y/N*******").upper()
+            print("******* Attempting to resolve issues automatically... *******")
 
-            if runrestruct == "Y":
-                print("Attempting to resolve issues automatically...")
-            else:
-                print("Please correct issues manually and try again")
+            #if failed:
+            print("******* Could not resolve... *******")#fake
+            print("Please correct issues manually and try again")
         else:
             print("No issues found")
             print("May proceed to ingestion attempt")
