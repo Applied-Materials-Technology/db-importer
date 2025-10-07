@@ -51,7 +51,7 @@ def test():
     return True
 
 def start(filename):
-    print("starting")
+    print("STARTING RESTRUCTURE ATTEMPT")
     data, headers = read_data(filename)
     new_df = write_units(headers, data)
     write_new_data(new_df)

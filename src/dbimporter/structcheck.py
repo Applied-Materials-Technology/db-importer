@@ -1,10 +1,10 @@
 import pandas as pd
 import json
 import sys
+import dbimporter.restructure as restructure
 from dbimporter.logger import logger, change_logging_level
 from dbimporter.expecteddata import ExpectedStruct
 from dbimporter.issuetracker import Issues
-from dbimporter.restructure import *
 
 class Check():
 
@@ -12,6 +12,7 @@ class Check():
                  filename: str = None,
                  console_loglevel: int = 0,
                  file_loglevel: int = 10,
+                 no_restructure: bool = False,
                  issues = Issues(),
                  expected_structure = ExpectedStruct()):
         
@@ -266,7 +267,9 @@ class Check():
             print("******* See example.log for details about report *******")
             print("******* Attempting to resolve issues automatically... *******")
 
-            #run restructure and rerun checker
+            if self.no_restructure == False:
+                restructure.start(filename=self.filename)
+
             #if failed:
             print("******* Could not resolve... *******")#fake
             print("Please correct issues manually and try again")
