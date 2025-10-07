@@ -18,8 +18,8 @@ class Check():
         
         self.filename = filename
         self.console_loglevel = self.loglevelcheck(console_loglevel)
-        #self.file_loglevel = file_loglevel
         self.file_loglevel = self.loglevelcheck(file_loglevel)
+        self.no_restructure = no_restructure
         self.issues = issues
         self.expected_structure = expected_structure
 
