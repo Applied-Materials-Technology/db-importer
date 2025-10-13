@@ -265,11 +265,13 @@ class Check():
         if all(attrs) == False:
             print("******* output.txt generated for overview results *******")
             print("******* See example.log for details about report *******")
-            print("******* Attempting to resolve issues automatically... *******")
 
-            if self.no_restructure == False:
-                restructure.start(filename=self.filename)
-
+            try_restructure = input("Attempt to resolve issue automatically?")
+            if try_restructure.upper() == "Y":
+                print("******* Attempting to resolve issues automatically... *******")
+            else:
+                pass
+        
             #if failed:
             print("******* Could not resolve... *******")#fake
             print("Please correct issues manually and try again")
