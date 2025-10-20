@@ -253,6 +253,13 @@ class Check():
                 f.write(i+": "+str(self.issues.__dict__[i])+"\n")
             f.close()
 
+        with open("output.json", "w") as f2:
+            issue_dict = {}
+            for i in self.issues.__dict__:
+                issue_dict[i] = self.issues.__dict__[i]
+            json.dump(issue_dict, f2)
+            
+
         self.output_message()
 
     def output_message(self):

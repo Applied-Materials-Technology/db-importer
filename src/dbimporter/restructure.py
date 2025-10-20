@@ -1,5 +1,6 @@
 import pandas as pd
 import datetime
+import json
 
 def read_data(filename):
     """
@@ -46,7 +47,7 @@ def write_new_data(data):
     with pd.ExcelWriter("test2.xlsx") as writer:
         data.to_excel(writer)
 
-def test():
+def find_me():
     print("module found")
     return True
 
@@ -55,6 +56,28 @@ def start(filename):
     data, headers = read_data(filename)
     new_df = write_units(headers, data)
     write_new_data(new_df)
+
+def test1():
+    text1 = "test1 found"
+    return text1
+
+def test2():
+    text2 = "test1 found"
+    return text2
+
+def restructure(filename,
+                detected_issues = None):
+    
+    test = {test1:"value1", test2:"value2"}
+
+    for key, val in test.items():
+        key()
+    #print("placeholder")
+    if detected_issues:
+        with open (detected_issues, "r") as fi:
+            my_issues = json.load(fi)
+        # for i in my_issues:
+            # do the function associated with the checks that are marked False ...
 
 #start('data/realdataex.xlsx')
 #start('src/dbimporter/data/realdataex.xlsx')
