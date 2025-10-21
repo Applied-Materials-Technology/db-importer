@@ -2,15 +2,6 @@ import pandas as pd
 import datetime
 import json
 
-def read_data(filename):
-    """
-    Reads the data from an excel file and gets the headings
-    """
-    df = pd.ExcelFile(filename)
-    data = df.parse()
-    headers = data.columns.values
-
-    return data, headers
 
 #data, headers = read_data('data/realdataex.xlsx')
 
@@ -65,6 +56,10 @@ def test2():
     text2 = "test1 found"
     return text2
 
+def test3(issues_data):
+    print(issues_data)
+
+
 def restructure(filename,
                 detected_issues = None):
     
@@ -84,3 +79,18 @@ def restructure(filename,
 
 #unit_struc = write_units()
 #write_new_data(unit_struc)
+
+class Revamper():
+
+    def __init__(self,
+                test1: str = test1(),
+                test2: str = test2(),
+                test3: str = None):
+    
+        self.test1 = test1
+        self.test2 = test2
+        self.test3 = self.test3()
+
+    def test3(self):
+        test3text = "test3 found"
+        return test3text
