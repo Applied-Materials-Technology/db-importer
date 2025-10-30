@@ -276,9 +276,10 @@ class Check():
             try_restructure = input("Attempt to resolve issue automatically?")
             if try_restructure.upper() == "Y":
                 print("******* Attempting to resolve issues automatically... *******")
-                revamper = restructure.Revamper()
-                print(getattr(revamper, "test1"))
-                print(getattr(revamper, "test3"))
+                #revamper = restructure.Revamper()
+                #print(getattr(revamper, "test1"))
+                #print(getattr(revamper, "test3"))
+                self.issues.check_self()
             else:
                 pass
         

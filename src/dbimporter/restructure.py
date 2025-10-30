@@ -5,6 +5,35 @@ import json
 
 #data, headers = read_data('data/realdataex.xlsx')
 
+def read_data(filename: str):
+
+    """
+    Read from excel file to check and return dict of sheetname: sheet_data
+
+
+    Parameters
+    ----------
+
+        filename: str
+            Path to excel file to be checked for importing
+
+    Returns
+    -------
+
+        sheet_names : list
+            A list of the sheet names from the file being read
+        sheets : dict
+            A dictionary of the sheet_names and the pandas dataframe parsed from those sheets
+    """
+
+    df = pd.ExcelFile(filename)
+    sheets = {}
+    sheet_names = df.sheet_names
+    for i in sheet_names:
+        sheets[i] = df.parse(i)
+
+    return sheet_names, sheets
+
 def get_units(headers):
     """
     Finds the units in the headers and 
@@ -67,18 +96,9 @@ def restructure(filename,
 
     for key, val in test.items():
         key()
-    #print("placeholder")
     if detected_issues:
         with open (detected_issues, "r") as fi:
             my_issues = json.load(fi)
-        # for i in my_issues:
-            # do the function associated with the checks that are marked False ...
-
-#start('data/realdataex.xlsx')
-#start('src/dbimporter/data/realdataex.xlsx')
-
-#unit_struc = write_units()
-#write_new_data(unit_struc)
 
 class Revamper():
 
