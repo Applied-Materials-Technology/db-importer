@@ -240,10 +240,10 @@ class Check():
             except:
                 logger.error(f"Units could not be found in sheet {i}")
 
-        self.write_results()
+        self.write_results(sheet_names, sheets_data)
 
 
-    def write_results(self):
+    def write_results(self, sheet_names, sheets_data):
         """
         Write the results of the issue tracker class to a text file
         """
@@ -260,9 +260,9 @@ class Check():
             json.dump(issue_dict, f2)
             
 
-        self.output_message()
+        self.output_message(sheet_names, sheets_data)
 
-    def output_message(self):
+    def output_message(self, sheet_names, sheets_data):
         """
         Give results of check and ask to resolve issues
         """
@@ -276,10 +276,8 @@ class Check():
             try_restructure = input("Attempt to resolve issue automatically?")
             if try_restructure.upper() == "Y":
                 print("******* Attempting to resolve issues automatically... *******")
-                #revamper = restructure.Revamper()
-                #print(getattr(revamper, "test1"))
-                #print(getattr(revamper, "test3"))
-                self.issues.check_self()
+                self.issues.check_self_beta(sheet_names, sheets_data)
+                self.issues.check_self(sheet_names, sheets_data)
             else:
                 pass
         

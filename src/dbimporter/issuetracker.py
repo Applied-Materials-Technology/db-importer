@@ -1,3 +1,5 @@
+import dbimporter as dbi
+
 class Issues():
 
     def __init__(self,
@@ -29,16 +31,30 @@ class Issues():
         print("I'm in unit")
         if self.units == True:
             self.printing()
-            return None
+            #return None
         else:
-            return None
+            #return None
+            pass
         
     def printing(self):
         print("I'm fixing something")
 
-    def check_self(self):
+    def check_self_beta(self, headers, data):
         self.sheet_name()
         self.sheet1_column()
         self.unit()
         print("hello")
+        
+    """
+    def fix_units(self, headers, data):
+        print("func started")
+        units = dbi.restructure.get_units(headers)
+        print("ran line 1")
+        new_df = dbi.restructure.write_units(headers, data, units)
+        print("ran line 2")
+        dbi.restructure.write_new_data(new_df)
+        print("ran line 3")
+
+    def check_self(self, headers, data):
+        self.fix_units(headers, data)"""
         

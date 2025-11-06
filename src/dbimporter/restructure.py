@@ -3,7 +3,6 @@ import datetime
 import json
 
 
-#data, headers = read_data('data/realdataex.xlsx')
 
 def read_data(filename: str):
 
@@ -36,7 +35,19 @@ def read_data(filename: str):
 
 def get_units(headers):
     """
-    Finds the units in the headers and 
+    Finds the units in the headers and return them
+
+        Parameters
+    ----------
+
+        headers:
+            Headers of the excel file being read
+
+    Returns
+    -------
+
+        units : dict
+            Dictionary of units from headers
     """
     units = {}
 
@@ -55,21 +66,43 @@ def get_units(headers):
 def write_units(headers, data, units=None):
     """
     Write the units to the first row of the new dataframe
+
+    Parameters
+    ----------
+
+        headers: str
+            Headers of the excel file being read
+        
+        data: DataFrame
+            The dataframe containing data of the excel file
+
+        units: dict
+            Dictionary of units from headers
+
+    Returns
+    -------
+
+        df2 : DataFrame
+            Dataframe of the units to be added to excel file
     """
-    units = get_units(headers)
+    #units = get_units(headers)
     df2 = pd.concat([pd.DataFrame([units]), data], axis=0)
     return df2
 
 def write_new_data(data):
     """
     Write the new dataframe to a file
+
+    Parameters
+    ----------
+
+        data: DataFrame
+            The dataframe containing data of the excel file
+
     """
     with pd.ExcelWriter("test2.xlsx") as writer:
         data.to_excel(writer)
 
-def find_me():
-    print("module found")
-    return True
 
 def start(filename):
     print("STARTING RESTRUCTURE ATTEMPT")
@@ -77,40 +110,3 @@ def start(filename):
     new_df = write_units(headers, data)
     write_new_data(new_df)
 
-def test1():
-    text1 = "test1 found"
-    return text1
-
-def test2():
-    text2 = "test1 found"
-    return text2
-
-def test3(issues_data):
-    print(issues_data)
-
-
-def restructure(filename,
-                detected_issues = None):
-    
-    test = {test1:"value1", test2:"value2"}
-
-    for key, val in test.items():
-        key()
-    if detected_issues:
-        with open (detected_issues, "r") as fi:
-            my_issues = json.load(fi)
-
-class Revamper():
-
-    def __init__(self,
-                test1: str = test1(),
-                test2: str = test2(),
-                test3: str = None):
-    
-        self.test1 = test1
-        self.test2 = test2
-        self.test3 = self.test3()
-
-    def test3(self):
-        test3text = "test3 found"
-        return test3text
