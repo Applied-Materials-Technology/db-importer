@@ -1,4 +1,4 @@
-import dbimporter as dbi
 
-dbi.restructure.test()
+def find_me():
+    return True
 

@@ -44,6 +44,9 @@ class Issues():
         self.sheet1_column()
         self.unit()
         print("hello")
+
+    def check_self(self, headers, data):
+        return None
         
     """
     def fix_units(self, headers, data):

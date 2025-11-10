@@ -1,5 +1,6 @@
 import pytest
 import dbimporter as dbi
+from dbimporter import test
 
 def test_find_module():
 
@@ -7,7 +8,7 @@ def test_find_module():
     Check module can be found
     """
 
-    modulefound = dbi.test()
+    modulefound = dbi.find_me()
     assert modulefound == True
 
 
