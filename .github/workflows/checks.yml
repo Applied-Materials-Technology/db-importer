@@ -21,7 +21,7 @@ jobs:
         run: pip3 install -e .
       - name: Test
         run: pytest -v tests/.
-  test:
+  test2:
       name: TestUV
       runs-on: ubuntu-24.04
       steps:
