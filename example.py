@@ -4,3 +4,4 @@ dbi.structcheck.Check(filename="src/dbimporter/data/baddata.xlsx", console_logle
 #dbi.structcheck.Check(filename="src/dbimporter/data/realdataex.xlsx")
 #dbi.restructure.test()
 #dbi.restructure.start(filename='src/dbimporter/data/realdataex.xlsx')
+#dbi.restructure.start(filename='src/dbimporter/data/baddata.xlsx')

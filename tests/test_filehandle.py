@@ -1,6 +1,5 @@
 import pytest
 import dbimporter as dbi
-from dbimporter import test
 
 def test_find_module():
 
@@ -9,7 +8,8 @@ def test_find_module():
     """
 
     modulefound = dbi.find_me()
-    assert modulefound == True
+    #assert modulefound == True
+    assert modulefound
 
 
 def test_filename_exists(monkeypatch):
@@ -67,6 +67,7 @@ def test_change_consolelogpass(monkeypatch, x, expected):
 def test_change_consolelogfail(monkeypatch, x, expected):
     monkeypatch.setattr('builtins.input', lambda _: "Y")
     check = dbi.structcheck.Check(filename="src/dbimporter/data/baddata.xlsx", console_loglevel = x)
+    assert check.console_loglevel == expected
 
 
 @pytest.mark.parametrize("x ,expected", testdata)
@@ -80,3 +81,4 @@ def test_change_filelogpass(monkeypatch, x, expected):
 def test_change_filelogfail(monkeypatch, x, expected):
     monkeypatch.setattr('builtins.input', lambda _: "Y")
     check = dbi.structcheck.Check(filename="src/dbimporter/data/baddata.xlsx", file_loglevel = x)
+    assert check.file_log_level == expected

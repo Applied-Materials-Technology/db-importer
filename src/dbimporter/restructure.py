@@ -1,6 +1,4 @@
 import pandas as pd
-import datetime
-import json
 
 
 
@@ -58,7 +56,7 @@ def get_units(headers):
 
             unit = i[start:end]
             units[i] = unit
-        except:
+        except ValueError:
             units[i] = None
 
     return units

@@ -7,10 +7,10 @@ import datetime
 
 def datetimefix(column, min = 12, max = 23):
     for i in range(min,max):
-        if type(column[i]) == datetime.time:
+        if type(column[i]) is datetime.time:
             date = datetime.datetime(2099, 12, 30).date()
             column[i] = date
-        elif type(column[i]) == datetime.datetime:
+        elif type(column[i]) is datetime.datetime:
             date = column[i].date()
             column[i] = date
 

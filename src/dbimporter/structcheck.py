@@ -1,7 +1,6 @@
 import pandas as pd
 import json
 import sys
-import dbimporter.restructure as restructure
 from dbimporter.logger import logger, change_logging_level
 from dbimporter.expecteddata import ExpectedStruct
 from dbimporter.issuetracker import Issues
@@ -190,7 +189,7 @@ class Check():
         checknan_list = pd.Series(unitlist).isnull()
 
         for i in range(len(checknan_list)):
-            if checknan_list[i] == True:
+            if checknan_list[i] is True:
                 checknan = True
                 wrong_column = columnname[i]
                 error_msg = f"The column {wrong_column} in sheet {sheet_name} has no units"
@@ -198,9 +197,9 @@ class Check():
             else:
                 continue
 
-        if checknan == True:
+        if checknan is True:
             self.issues.units = False
-        elif checknan == False:
+        elif checknan is False:
             self.issues.units = True
         else:
             logger.error("Unit existence check could not be determined")
@@ -220,6 +219,7 @@ class Check():
                 Path to excel file to be checked for importing
         """
 
+        #mylogger = logging.getLogger(__name__)
         change_logging_level(self.console_loglevel, self.file_loglevel)
 
         sheet_names, sheets_data = self.read_data(filename)
@@ -237,7 +237,7 @@ class Check():
                 unit_data = sheets_data[i].set_index(['Category'])
                 units = [k for k in unit_data.xs("Unit")]
                 print(units)
-            except:
+            except (IndexError, KeyError): # may need to capture more errors...
                 logger.error(f"Units could not be found in sheet {i}")
 
         self.write_results(sheet_names, sheets_data)
@@ -269,7 +269,7 @@ class Check():
 
         attrs = (getattr(self.issues, i) for i in self.issues.__dict__)
 
-        if all(attrs) == False:
+        if all(attrs) is False:
             print("******* output.txt generated for overview results *******")
             print("******* See example.log for details about report *******")
 

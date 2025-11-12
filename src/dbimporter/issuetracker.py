@@ -1,4 +1,3 @@
-import dbimporter as dbi
 
 class Issues():
 
@@ -13,7 +12,8 @@ class Issues():
 
     def sheet_name(self):
         print("I'm in sheet name")
-        if self.sheet_names == True:
+        #if self.sheet_names == True:
+        if self.sheet_names is True:
             self.printing()
             return None
         else:
@@ -21,7 +21,7 @@ class Issues():
 
     def sheet1_column(self):
         print("I'm in sheet1 column")
-        if self.sheet1_columns == True:
+        if self.sheet1_columns is True:
             self.printing()
             return None
         else:
@@ -29,7 +29,7 @@ class Issues():
         
     def unit(self):
         print("I'm in unit")
-        if self.units == True:
+        if self.units is True:
             self.printing()
             #return None
         else:
