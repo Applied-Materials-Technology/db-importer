@@ -21,21 +21,3 @@ jobs:
         run: pip3 install -e .
       - name: Test
         run: pytest -v tests/.
-  test2:
-      name: TestUV
-      runs-on: ubuntu-24.04
-      steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-      - name: Install UV 
-        uses: astral-sh/setup-uv@v6
-      - name: Get package
-        run: uv pip install -e .
-      - name: Install Ruff
-        uses: uv pip install ruff
-      - name: run ruff
-        uses: uv run ruff check .
-      - name: Install pytest
-        uses: uv pip install pytest
-      - name: run pytest tests
-        uses: uv run pytest -v tests/.
