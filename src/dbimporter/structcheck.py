@@ -1,16 +1,24 @@
 import pandas as pd
 import json
 import sys
+from enum import Enum
 from dbimporter.logger import logger, change_logging_level
 from dbimporter.expecteddata import ExpectedStruct
 from dbimporter.issuetracker import Issues
+
+class LogLevel(Enum):
+    DEBUG = 10
+    INFO = 20
+    WARNING = 30
+    ERROR = 40
+    CRITICAL = 50
 
 class Check():
 
     def __init__(self,
                  filename: str = None,
-                 console_loglevel: int = 0,
-                 file_loglevel: int = 10,
+                 console_loglevel: int | str = 0,
+                 file_loglevel: int | str = 10,
                  no_restructure: bool = False,
                  issues = Issues(),
                  expected_structure = ExpectedStruct()):
@@ -31,10 +39,20 @@ class Check():
     def loglevelcheck(self, loglevel):
         #eventually allow for word levels...
         logging_list = [0,10,20,30,40,50,60]
+        logging_list_num = [member.value for member in LogLevel]
+        print(logging_list_num)
+        logging_list_word = [member.name for member in LogLevel]
         if loglevel not in logging_list:
             print("logging level must be a valid level")
             raise Exception(ValueError)
             sys.exit()
+        if loglevel not in LogLevel._value2member_map_:
+            #alter python version and change
+            print("logging level must be a valid level")
+            #raise Exception(ValueError)
+            #sys.exit()
+        if loglevel not in logging_list_word and logging_list_num:
+            print("or statement works...")
         return loglevel
 
     def read_data(self, 
