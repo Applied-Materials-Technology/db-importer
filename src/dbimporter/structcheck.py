@@ -36,23 +36,35 @@ class Check():
 
         self.start(self.filename)
 
+    # def loglevelcheck(self, loglevel):
+    #     #eventually allow for word levels...
+    #     logging_list = [0,10,20,30,40,50,60]
+    #     logging_list_num = [member.value for member in LogLevel]
+    #     print(logging_list_num)
+    #     logging_list_word = [member.name for member in LogLevel]
+    #     if loglevel not in logging_list:
+    #         print("logging level must be a valid level")
+    #         #raise Exception(ValueError)
+    #         #sys.exit()
+    #     if loglevel not in LogLevel._value2member_map_:
+    #         #alter python version and change
+    #         print("logging level must be a valid level")
+    #         #raise Exception(ValueError)
+    #         #sys.exit()
+    #     if loglevel not in (logging_list_word and logging_list_num):
+    #     #if loglevel not in logging_list_word and logging_list_num:
+    #         #print("or statement works...")
+    #         pass
+    #     return loglevel
+
     def loglevelcheck(self, loglevel):
         #eventually allow for word levels...
-        logging_list = [0,10,20,30,40,50,60]
-        logging_list_num = [member.value for member in LogLevel]
-        print(logging_list_num)
-        logging_list_word = [member.name for member in LogLevel]
+        logging_list = [0,10,20,30,40,50,60,
+                        "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
         if loglevel not in logging_list:
             print("logging level must be a valid level")
             raise Exception(ValueError)
             sys.exit()
-        if loglevel not in LogLevel._value2member_map_:
-            #alter python version and change
-            print("logging level must be a valid level")
-            #raise Exception(ValueError)
-            #sys.exit()
-        if loglevel not in logging_list_word and logging_list_num:
-            print("or statement works...")
         return loglevel
 
     def read_data(self, 
@@ -206,14 +218,20 @@ class Check():
 
         checknan_list = pd.Series(unitlist).isnull()
 
+        no_units = []
+
         for i in range(len(checknan_list)):
-            if checknan_list[i] is True:
+            if checknan_list[i] == True:
                 checknan = True
                 wrong_column = columnname[i]
+                no_units.append(wrong_column)
                 error_msg = f"The column {wrong_column} in sheet {sheet_name} has no units"
                 logger.error(error_msg)
+                self.issues.missing_units = no_units
             else:
                 continue
+
+        #self.issues.missing_units = no_units
 
         if checknan is True:
             self.issues.units = False
@@ -245,7 +263,6 @@ class Check():
         for i in sheet_names:         
 
             data_column_name = self.read_columns(0, sheets_data[i])
-            print(f"column names are {data_column_name}")
             expect_col_names = getattr(self.expected_structure, i)
             self.check_column_names(data_column_name, expect_col_names, i)
 
@@ -254,7 +271,6 @@ class Check():
                 self.check_units_nan(data_column_name, unit_check, i)
                 unit_data = sheets_data[i].set_index(['Category'])
                 units = [k for k in unit_data.xs("Unit")]
-                print(units)
             except (IndexError, KeyError): # may need to capture more errors...
                 logger.error(f"Units could not be found in sheet {i}")
 

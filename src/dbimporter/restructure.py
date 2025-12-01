@@ -83,8 +83,14 @@ def write_units(headers, data, units=None):
         df2 : DataFrame
             Dataframe of the units to be added to excel file
     """
-    #units = get_units(headers)
-    df2 = pd.concat([pd.DataFrame([units]), data], axis=0)
+    units = get_units(headers)
+    print(units)
+    #df2 = pd.concat([pd.DataFrame([units]), data], axis=0)
+    #print(pd.DataFrame([units]))
+    #print(units)
+    #print(headers)
+    #print(data)
+    df2 = True
     return df2
 
 def write_new_data(data):
@@ -104,7 +110,8 @@ def write_new_data(data):
 
 def start(filename):
     print("STARTING RESTRUCTURE ATTEMPT")
-    data, headers = read_data(filename)
+    headers, data = read_data(filename)
     new_df = write_units(headers, data)
-    write_new_data(new_df)
+    print(new_df)
+    #write_new_data(new_df)
 
