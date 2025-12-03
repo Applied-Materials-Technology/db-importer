@@ -89,7 +89,12 @@ class Check():
                 A dictionary of the sheet_names and the pandas dataframe parsed from those sheets
         """
 
-        df = pd.ExcelFile(self.filename)
+        if self.filename.lower().endswith('.csv'):
+            #df = pd.read_csv(self.filename, on_bad_lines='skip')
+            #will eventually read csv...
+            pass
+        elif self.filename.lower().endswith('.xlsx'):
+            df = pd.ExcelFile(self.filename)
 
         self.check_sheets(df.sheet_names)
         sheets = {}
