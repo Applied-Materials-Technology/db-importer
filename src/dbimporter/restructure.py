@@ -34,8 +34,21 @@ def read_data(filename: str):
 
     return sheet_names, sheets
 
-def get_headers(sheets):
+def get_headers(sheets, data):
     print("getting headers")
+
+def get_units2(data):
+    units = {}
+    try:
+        start = data.index("(")+1
+        end = data.index(")")
+
+        unit = data[start:end]
+        units[data] = unit
+    except ValueError:
+        units[data] = None
+
+    return units
 
 def get_units(headers):
     """
@@ -89,13 +102,17 @@ def write_units(headers, data, units=None):
         df2 : DataFrame
             Dataframe of the units to be added to excel file
     """
-    units = get_units(headers)
-    print(units)
+    #units = get_units(headers)
+    data1 = data["Sheet1"]
+    units1 = get_units2(data1)
+    print(units1)
+    #print(units)
     #df2 = pd.concat([pd.DataFrame([units]), data], axis=0)
     #print(pd.DataFrame([units]))
     #print(units)
-    print(headers)
+    #print(headers)
     #print(data)
+    #df3 = pd.concat([pd.DataFrame([units1]), data1], axis=0)
     df2 = True
     return df2
 
@@ -118,7 +135,7 @@ def write_new_data(data):
 def start(filename):
     print("STARTING RESTRUCTURE ATTEMPT")
     headers, data = read_data(filename)
-    headers2 = get_headers(headers)
+    headers2 = get_headers(headers, data)
     new_df = write_units(headers, data)
     print(new_df)
     #write_new_data(new_df)

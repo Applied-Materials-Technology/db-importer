@@ -36,27 +36,6 @@ class Check():
 
         self.start(self.filename)
 
-    # def loglevelcheck(self, loglevel):
-    #     #eventually allow for word levels...
-    #     logging_list = [0,10,20,30,40,50,60]
-    #     logging_list_num = [member.value for member in LogLevel]
-    #     print(logging_list_num)
-    #     logging_list_word = [member.name for member in LogLevel]
-    #     if loglevel not in logging_list:
-    #         print("logging level must be a valid level")
-    #         #raise Exception(ValueError)
-    #         #sys.exit()
-    #     if loglevel not in LogLevel._value2member_map_:
-    #         #alter python version and change
-    #         print("logging level must be a valid level")
-    #         #raise Exception(ValueError)
-    #         #sys.exit()
-    #     if loglevel not in (logging_list_word and logging_list_num):
-    #     #if loglevel not in logging_list_word and logging_list_num:
-    #         #print("or statement works...")
-    #         pass
-    #     return loglevel
-
     def loglevelcheck(self, loglevel):
         #eventually allow for word levels...
         logging_list = [0,10,20,30,40,50,60,
