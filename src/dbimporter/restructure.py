@@ -104,8 +104,12 @@ def write_units(headers, data, units=None):
     """
     #units = get_units(headers)
     data1 = data["Sheet1"]
-    units1 = get_units2(data1)
-    print(units1)
+    print(data1.index)
+    specific_row = data1.iloc[0]
+    #print(specific_row)
+    #print(data1.loc("0"))
+    #units1 = get_units2(data1)
+    #print(units1)
     #print(units)
     #df2 = pd.concat([pd.DataFrame([units]), data], axis=0)
     #print(pd.DataFrame([units]))

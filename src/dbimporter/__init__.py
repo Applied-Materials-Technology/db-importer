@@ -5,3 +5,4 @@ from dbimporter.logger import *
 from dbimporter.structcheck import *
 from dbimporter.restructure import *
 from dbimporter.test import *
+from dbimporter.write_units import *
