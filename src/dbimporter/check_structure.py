@@ -6,37 +6,27 @@ from dbimporter.logger import logger, change_logging_level
 from dbimporter.expecteddata import ExpectedStruct
 from dbimporter.issuetracker import Issues
 
-class LogLevel(Enum):
-    DEBUG = 10
-    INFO = 20
-    WARNING = 30
-    ERROR = 40
-    CRITICAL = 50
+# UNDER CONSTRUCTION - WILL NOT RUN
 
+# check can be moved to have the function of start
 
-
-def init(self,
-                filename: str = None,
-                console_loglevel: int | str = 0,
-                file_loglevel: int | str = 10,
-                no_restructure: bool = False,
-                issues = Issues(),
-                expected_structure = ExpectedStruct()):
+def check(filename: str = None,
+          console_loglevel: int | str = 0,
+          file_loglevel: int | str = 10,
+          no_restructure: bool = False,
+          issues = Issues(),
+          expected_structure = ExpectedStruct()):
     
-    self.filename = filename
-    self.console_loglevel = self.loglevelcheck(console_loglevel)
-    self.file_loglevel = self.loglevelcheck(file_loglevel)
-    self.no_restructure = no_restructure
-    self.issues = issues
-    self.expected_structure = expected_structure
 
-    if self.file_loglevel > 30:
+    console_loglevel = loglevelcheck(console_loglevel)
+    file_loglevel = loglevelcheck(file_loglevel)
+    if file_loglevel > 30:
         print("Log file must be set to severity threshold 30 or lower")
         sys.exit()
 
-    self.start(self.filename)
+    #start(filename)
 
-def loglevelcheck(self, loglevel):
+def loglevelcheck(loglevel):
     #eventually allow for word levels...
     logging_list = [0,10,20,30,40,50,60,
                     "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
@@ -46,8 +36,7 @@ def loglevelcheck(self, loglevel):
         sys.exit()
     return loglevel
 
-def read_data(self, 
-                filename: str):
+def read_data(filename: str):
 
     """
     Read from excel file to check and return dict of sheetname: sheet_data
@@ -68,14 +57,14 @@ def read_data(self,
             A dictionary of the sheet_names and the pandas dataframe parsed from those sheets
     """
 
-    if self.filename.lower().endswith('.csv'):
+    if filename.lower().endswith('.csv'):
         #df = pd.read_csv(self.filename, on_bad_lines='skip')
         #will eventually read csv...
         pass
-    elif self.filename.lower().endswith('.xlsx'):
-        df = pd.ExcelFile(self.filename)
+    elif filename.lower().endswith('.xlsx'):
+        df = pd.ExcelFile(filename)
 
-    self.check_sheets(df.sheet_names)
+    check_sheets(df.sheet_names)
     sheets = {}
     sheet_names = df.sheet_names
     for i in sheet_names:
@@ -83,9 +72,8 @@ def read_data(self,
 
     return sheet_names, sheets
 
-def read_columns(self, 
-                    location: str, 
-                    sheet_data: pd.core.frame.DataFrame):
+def read_columns(location: str, 
+                 sheet_data: pd.core.frame.DataFrame):
 
     """
     Read the name of the columns in a given sheet
@@ -113,8 +101,7 @@ def read_columns(self,
 
     return columnlist
 
-def check_sheets(self, 
-                    sheet_names: list):
+def check_sheets(sheet_names: list):
 
     """
     Check if the sheets are the expected names, and mark as true if correct
@@ -127,19 +114,18 @@ def check_sheets(self,
             Names of the sheets of an excel file
     """
 
-    if sheet_names == self.expected_structure.sheet_names:
-        self.issues.sheet_names = True
-    elif sheet_names != self.expected_structure.sheet_names:
-        logger.warning(f"Sheet name incorrect, expected {self.expected_structure.sheet_names}. got {sheet_names}")
-        self.issues.sheet_names = False
+    if sheet_names == expected_structure.sheet_names:
+        issues.sheet_names = True
+    elif sheet_names != expected_structure.sheet_names:
+        logger.warning(f"Sheet name incorrect, expected {expected_structure.sheet_names}. got {sheet_names}")
+        issues.sheet_names = False
     else:
         logger.error("Sheets name check could not be determined")
-        self.issues.sheet_names = False
+        issues.sheet_names = False
 
-def check_column_names(self, 
-                        real_column_names: list, 
-                        expected_column_names: list, 
-                        sheet_name: str):
+def check_column_names(real_column_names: list, 
+                       expected_column_names: list, 
+                       sheet_name: str):
 
 
     """
@@ -161,10 +147,10 @@ def check_column_names(self,
     """
 
     if sorted(real_column_names) == sorted(expected_column_names):
-        self.issues.sheet1_columns = True
+        issues.sheet1_columns = True
         logger.info(f"Column names correct for sheet {sheet_name}")
     elif sorted(real_column_names) != sorted(expected_column_names):
-        self.issues.sheet1_columns = False
+        issues.sheet1_columns = False
         logger.warning(f"Column names incorrect in sheet {sheet_name}, expected {expected_column_names}, got {real_column_names}")
         unique_to_real = set(real_column_names) - set(expected_column_names)
         unique_to_expected = set(expected_column_names) - set(real_column_names)
@@ -174,11 +160,10 @@ def check_column_names(self,
             logger.warning(f"The {unique_to_expected} column expected in {sheet_name}, but wasn't found")
     else:
         logger.error("Column name check could not be determined")
-        self.issues.sheet1_columns = False
+        issues.sheet1_columns = False
 
 
-def check_units_nan(self, 
-                    columnname: str, 
+def check_units_nan(columnname: str, 
                     unitlist: list, 
                     sheet_name: str):
 
@@ -211,22 +196,21 @@ def check_units_nan(self,
             no_units.append(wrong_column)
             error_msg = f"The column {wrong_column} in sheet {sheet_name} has no units"
             logger.error(error_msg)
-            self.issues.missing_units = no_units
+            issues.missing_units = no_units
         else:
             continue
 
     #self.issues.missing_units = no_units
 
     if checknan is True:
-        self.issues.units = False
+        issues.units = False
     elif checknan is False:
-        self.issues.units = True
+        issues.units = True
     else:
         logger.error("Unit existence check could not be determined")
-        self.issues.units = False
+        issues.units = False
 
-def start(self, 
-            filename: str):
+def start(filename: str):
 
     """
     Runs the checking methods on the excel file
@@ -240,41 +224,42 @@ def start(self,
     """
 
     #mylogger = logging.getLogger(__name__)
-    change_logging_level(self.console_loglevel, self.file_loglevel)
+    change_logging_level(console_loglevel, file_loglevel)
 
-    sheet_names, sheets_data = self.read_data(filename)
+    sheet_names, sheets_data = read_data(filename)
 
     for i in sheet_names:         
 
-        data_column_name = self.read_columns(0, sheets_data[i])
-        expect_col_names = getattr(self.expected_structure, i)
-        self.check_column_names(data_column_name, expect_col_names, i)
+        data_column_name = read_columns(0, sheets_data[i])
+        expect_col_names = getattr(expected_structure, i)
+        check_column_names(data_column_name, expect_col_names, i)
 
         try:
-            unit_check = self.read_columns(1, sheets_data[i])
-            self.check_units_nan(data_column_name, unit_check, i)
+            unit_check = read_columns(1, sheets_data[i])
+            check_units_nan(data_column_name, unit_check, i)
             unit_data = sheets_data[i].set_index(['Category'])
             units = [k for k in unit_data.xs("Unit")]
         except (IndexError, KeyError): # may need to capture more errors...
             logger.error(f"Units could not be found in sheet {i}")
 
-    self.write_results(sheet_names, sheets_data)
+    write_results(sheet_names, sheets_data)
 
 
-def write_results(self, sheet_names, sheets_data):
+def write_results(sheet_names, 
+                  sheets_data):
     """
     Write the results of the issue tracker class to a text file
     """
 
     with open("output.txt", "w") as f:
-        for i in self.issues.__dict__:
-            f.write(i+": "+str(self.issues.__dict__[i])+"\n")
+        for i in issues.__dict__:
+            f.write(i+": "+str(issues.__dict__[i])+"\n")
         f.close()
 
     with open("output.json", "w") as f2:
         issue_dict = {}
-        for i in self.issues.__dict__:
-            issue_dict[i] = self.issues.__dict__[i]
+        for i in issues.__dict__:
+            issue_dict[i] = issues.__dict__[i]
         json.dump(issue_dict, f2)
             
 
