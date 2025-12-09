@@ -6,3 +6,5 @@ from dbimporter.structcheck import *
 from dbimporter.restructure import *
 from dbimporter.test import *
 from dbimporter.write_units import *
+from dbimporter.check_structure import *
+from dbimporter.issuescheck import *
