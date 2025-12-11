@@ -9,4 +9,6 @@ import dbimporter as dbi
 
 #dbi.restructure.start(filename="src/dbimporter/data/find_unit_test.xlsx")
 
-dbi.write_units.start(filename="src/dbimporter/data/find_unit_test.xlsx")
+#dbi.write_units.start(filename="src/dbimporter/data/find_unit_test.xlsx")
+
+dbi.check_structure.Check(filename="src/dbimporter/data/baddata.xlsx", console_loglevel=40)

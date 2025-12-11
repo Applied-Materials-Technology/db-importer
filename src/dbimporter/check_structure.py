@@ -24,8 +24,8 @@ class Check():
         self.issues = issues
         self.expected_structure = expected_structure
 
-        if self.issues.expected_structure == None:
-            self.issues.expected_structure = self.expected_structure
+        #if self.issues.expected_structure == None:
+        #    self.issues.expected_structure = self.expected_structure
 
         if self.file_loglevel > 30:
             print("Log file must be set to severity threshold 30 or lower")
@@ -72,7 +72,7 @@ class Check():
         elif self.filename.lower().endswith('.xlsx'):
             df = pd.ExcelFile(self.filename)
 
-        self.issues.check_sheets(df.sheet_names)
+        self.issues.check_sheets(df.sheet_names, self.expected_structure)
         sheets = {}
         sheet_names = df.sheet_names
         for i in sheet_names:
@@ -160,6 +160,7 @@ class Check():
             issue_dict = {}
             for i in self.issues.__dict__:
                 issue_dict[i] = self.issues.__dict__[i]
+            print(issue_dict)
             json.dump(issue_dict, f2)
             
 

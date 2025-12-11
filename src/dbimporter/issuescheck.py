@@ -4,17 +4,18 @@ import sys
 from enum import Enum
 from dbimporter.expecteddata import ExpectedStruct
 from typing import List
+from dbimporter.logger import logger
 
 class Issues():
 
     def __init__(self,
-                 expected_issues = None,
+                 #expected_structure = None,
                  sheet_names: bool = None,
                  sheet1_columns: bool = None,
                  units: bool = None,
                  missing_units: dict = None,):
         
-        self.expected_issues = expected_issues
+        #self.expected_structure = expected_structure
         self.sheet_names = sheet_names
         self.sheet1_columns = sheet1_columns
         self.units = units
@@ -61,7 +62,8 @@ class Issues():
         return None
          
     def check_sheets(self, 
-                     sheet_names: list):
+                     sheet_names: list,
+                     expected_structure):
 
         """
         Check if the sheets are the expected names, and mark as true if correct
@@ -74,10 +76,10 @@ class Issues():
                 Names of the sheets of an excel file
         """
 
-        if sheet_names == self.expected_structure.sheet_names:
+        if sheet_names == expected_structure.sheet_names:
             self.sheet_names = True
-        elif sheet_names != self.expected_structure.sheet_names:
-            logger.warning(f"Sheet name incorrect, expected {self.expected_structure.sheet_names}. got {sheet_names}")
+        elif sheet_names != expected_structure.sheet_names:
+            logger.warning(f"Sheet name incorrect, expected {expected_structure.sheet_names}. got {sheet_names}")
             self.sheet_names = False
         else:
             logger.error("Sheets name check could not be determined")
