@@ -24,9 +24,6 @@ class Check():
         self.issues = issues
         self.expected_structure = expected_structure
 
-        #if self.issues.expected_structure == None:
-        #    self.issues.expected_structure = self.expected_structure
-
         if self.file_loglevel > 30:
             print("Log file must be set to severity threshold 30 or lower")
             sys.exit()
@@ -124,7 +121,6 @@ class Check():
                 Path to excel file to be checked for importing
         """
 
-        #mylogger = logging.getLogger(__name__)
         change_logging_level(self.console_loglevel, self.file_loglevel)
 
         sheet_names, sheets_data = self.read_data(filename)
