@@ -34,6 +34,7 @@ def read_data(filename: str):
     return sheet_names, sheets
 
 def get_units(headers):
+
     """
     Finds the units in the headers and return them
 
@@ -49,6 +50,7 @@ def get_units(headers):
         units : dict
             Dictionary of units from headers
     """
+
     units = {}
 
     for i in headers:
@@ -63,9 +65,52 @@ def get_units(headers):
 
     return units
 
-def write_new_data(data):
+def make_new_df(old_df_data, units):
+
+    """
+    Writes the units found for each column in the "Units" row
+
+    Parameters
+    ----------
+
+        old_df_data : DataFrame
+            The dataframe to write units to
+        units : dict
+            The units which have been obtained and their corresponding column
+
+    Returns
+    -------
+
+        new_df : DataFrame
+            Dataframe which now contains the units
+    """
+
+    new_df = old_df_data
+    new_units = [units[i] for i in units]
+    new_df.loc["Unit"] = new_units
+
+    return new_df
+
+def create_new_excel(data, sheet_name):
+
     """
     Write the new dataframe to a file
+
+    Parameters
+    ----------
+
+        data: DataFrame
+            Write new dataframe to a new Excel file
+
+    """
+
+    with pd.ExcelWriter("test2.xlsx") as writer:
+        data.to_excel(writer, sheet_name = sheet_name)
+
+def write_new_data(data, sheet_name):
+
+    """
+    Write the new dataframe to an exisiting Excel file
 
     Parameters
     ----------
@@ -75,19 +120,27 @@ def write_new_data(data):
 
     """
 
-    with pd.ExcelWriter("test2.xlsx") as writer:
-        data.to_excel(writer)
+    try: 
+        with pd.ExcelWriter("test2.xlsx", mode='a') as writer:
+            data.to_excel(writer, sheet_name = sheet_name)
+    except FileNotFoundError:
+        create_new_excel(data, sheet_name)
+    except ValueError:
+        print("This file already exists...")
 
 
 def start(filename):
+
     print("STARTING RESTRUCTURE ATTEMPT")
     headers, data = read_data(filename)
-    data1 = data["Sheet1"].set_index('Category')
-    entry_info = data1.loc["Entry"]
-    for i in data1.loc["Entry"]:
-        unit = get_units(i)
-        #print(unit)
-        #print(i)
-    units = get_units(entry_info)
-    print(units)
-    #write_new_data(new_df)
+
+    for i in data:
+        try:
+            print(i)
+            my_data = data[i].set_index('Category')
+            entry_info = my_data.loc["Entry"]
+            units = get_units(entry_info)
+            new_df = make_new_df(my_data, units)
+            write_new_data(new_df, i)
+        except KeyError:
+            print("skipping sheet...")
