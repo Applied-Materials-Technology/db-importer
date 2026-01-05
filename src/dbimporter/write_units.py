@@ -63,6 +63,8 @@ def get_units(headers):
         except ValueError:
             units[i] = None
 
+    #print(units)
+
     return units
 
 def make_new_df(old_df_data, units):
@@ -84,10 +86,22 @@ def make_new_df(old_df_data, units):
         new_df : DataFrame
             Dataframe which now contains the units
     """
+    
+    new_data = old_df_data.values.tolist()
+    index_vals = old_df_data.index.values
+    header_vals = old_df_data.columns.values
+    print(header_vals)
 
-    new_df = old_df_data
     new_units = [units[i] for i in units]
-    new_df.loc["Unit"] = new_units
+    for i in range(len(new_data[1])):
+        new_data[1][i] = new_units[i]
+        new_data[0][i] = new_data[0][i].replace(f"({new_units[i]})","")
+
+
+
+    new_df = pd.DataFrame(new_data)
+    new_df.index = index_vals
+    new_df.columns = header_vals
 
     return new_df
 
