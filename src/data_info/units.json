@@ -1,0 +1,9 @@
+{
+    "length": ["m","mm","cm"],
+    "stress": ["Pa", "MPa"],
+    "load": ["N, kN"],
+    "strain": ["%"],
+    "extension": ["mm","cm"],
+    "position": ["mm","cm"],
+    "displacement": ["mm","cm"]
+}
