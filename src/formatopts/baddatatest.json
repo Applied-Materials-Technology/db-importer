@@ -1,0 +1,6 @@
+{
+    "sheet_names": ["Sheet1", "Sheet2", "Sheet3"],
+    "Sheet1": ["Entry", "Material", "Heat", "Product", "Sub-product", "Test_Lab", "Specimen ID", "Internal ID"],
+    "Sheet2": ["Test Row", "Curve description", "Name", "Units", "cycle number"],
+    "Sheet3": ["Entry", "Material", "Heat", "Product", "Sub-product", "Test_Lab", "Specimen ID", "Internal ID"]
+}

@@ -15,7 +15,9 @@ class Check():
                  file_loglevel: int | str = 10,
                  no_restructure: bool = False,
                  issues = Issues(),
-                 expected_structure = ExpectedStruct()):
+                 expected_structure = ExpectedStruct(),
+                 file_type = None,
+                 expected_json = None):
         
         self.filename = filename
         self.console_loglevel = self.loglevelcheck(console_loglevel)
@@ -23,12 +25,22 @@ class Check():
         self.no_restructure = no_restructure
         self.issues = issues
         self.expected_structure = expected_structure
+        self.file_type = file_type
+
+        self.expected_json = self.get_expected_json(self.file_type)
 
         if self.file_loglevel > 30:
             print("Log file must be set to severity threshold 30 or lower")
             sys.exit()
 
         self.start(self.filename)
+
+    def get_expected_json(self, file_type):
+        # find the path to the associated json settings for the file type
+        filename = None
+        
+        return filename
+
 
     def loglevelcheck(self, loglevel):
         #eventually allow for word levels...
@@ -63,17 +75,28 @@ class Check():
         """
 
         if self.filename.lower().endswith('.csv'):
-            #df = pd.read_csv(self.filename, on_bad_lines='skip')
-            #will eventually read csv...
-            pass
+            df = pd.read_csv(self.filename, on_bad_lines='skip')
         elif self.filename.lower().endswith('.xlsx'):
             df = pd.ExcelFile(self.filename)
 
-        self.issues.check_sheets(df.sheet_names, self.expected_structure)
-        sheets = {}
-        sheet_names = df.sheet_names
-        for i in sheet_names:
-            sheets[i] = df.parse(i)
+
+        try:
+            self.issues.check_sheets(df.sheet_names, self.expected_structure)
+            #self.issues.check_sheets(df.sheet_names, self.expected_json
+            sheets = {}
+            sheet_names = df.sheet_names
+            for i in sheet_names:
+                sheets[i] = df.parse(i)
+        except AttributeError:
+            logger.info("File format has no sheets")
+            #sheets = {}
+            sheet_names = [self.filename]
+            sheets = {self.filename: df}
+
+        print(sheets)
+
+        # for i in sheet_names:
+        #     sheets[i] = df.parse(i)
 
         return sheet_names, sheets
 
@@ -128,7 +151,12 @@ class Check():
         for i in sheet_names:         
 
             data_column_name = self.read_columns(0, sheets_data[i])
-            expect_col_names = getattr(self.expected_structure, i)
+            try:
+                expect_col_names = getattr(self.expected_structure, i)
+                #expect_col_names = self.expected_structure[i]
+            except AttributeError:
+                logger.debug(f"still in testing mode: sheet names have no associated data")
+                expect_col_names = ["Entry", "Material", "Heat", "Product", "Sub-product", "Test_Lab", "Specimen ID", "Internal ID"]
             self.issues.check_column_names(data_column_name, expect_col_names, i)
 
             try:
