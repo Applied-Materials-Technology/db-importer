@@ -6,7 +6,13 @@ from dbimporter.logger import logger, change_logging_level
 from dbimporter.expecteddata import ExpectedStruct
 from typing import List
 from dbimporter.issuescheck import Issues
-        
+
+
+class Jsonfile(Enum):
+    FILE1 = "jsonpath/jsonfile1.json"
+    FILE2 = "jsonpath/jsonfile2.json"
+    BADDATA = "src/formatopts/baddatatest.json"
+
 class Check():
 
     def __init__(self,
@@ -26,8 +32,13 @@ class Check():
         self.issues = issues
         self.expected_structure = expected_structure
         self.file_type = file_type
+        self.expected_json = expected_json
 
-        self.expected_json = self.get_expected_json(self.file_type)
+        if self.expected_json is None:
+            #self.expected_json = self.get_expected_json()
+            filename, expected_json = self.get_expected_json()
+            self.expected_json = filename
+            print(f"json has been set as {self.expected_json}")
 
         if self.file_loglevel > 30:
             print("Log file must be set to severity threshold 30 or lower")
@@ -35,11 +46,42 @@ class Check():
 
         self.start(self.filename)
 
-    def get_expected_json(self, file_type):
+    def get_expected_json(self):
+
         # find the path to the associated json settings for the file type
-        filename = None
-        
-        return filename
+
+
+        """
+        Chooses the associated json settings for the file type provided.
+
+        Returns
+        -------
+
+            filename : Path
+                The name of the json file that contains the expected data structure
+                for the provided file
+            json_data : dict
+                The data from the settings json file
+        """
+
+        if self.file_type == "one":
+            filename = Jsonfile.FILE1.value
+        elif self.file_type == "two":
+            filename = Jsonfile.FILE2.value
+        elif self.file_type == "baddata":
+            filename = Jsonfile.BADDATA.value
+        else:
+            logger.warning(f"file structure could not be determined, defaulting to option BADDATA")
+            filename = Jsonfile.BADDATA.value
+
+        try:
+            with open(filename) as file:
+                json_data = json.load(file)
+        except:
+            logger.error(f"Json file {filename} could not be opened")
+            json_data = None
+            
+        return filename, json_data
 
 
     def loglevelcheck(self, loglevel):
