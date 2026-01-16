@@ -2,28 +2,26 @@ import pandas as pd
 import json
 import sys
 from enum import Enum
-from dbimporter.expecteddata import ExpectedStruct
 from typing import List
 from dbimporter.logger import logger
 
 class Issues():
 
     def __init__(self,
-                 #expected_structure = None,
                  sheet_names: bool = None,
                  sheet1_columns: bool = None,
                  units: bool = None,
                  missing_units: dict = None,):
         
-        #self.expected_structure = expected_structure
         self.sheet_names = sheet_names
         self.sheet1_columns = sheet1_columns
         self.units = units
         self.missing_units = missing_units
 
     def sheet_name(self):
+
         print("I'm in sheet name")
-        #if self.sheet_names == True:
+
         if self.sheet_names is True:
             self.printing("sheet_name")
             return None
@@ -31,7 +29,9 @@ class Issues():
             return None
 
     def sheet1_column(self):
+
         print("I'm in sheet1 column")
+
         if self.sheet1_columns is True:
             self.printing("sheet1_column")
             return None
@@ -39,7 +39,9 @@ class Issues():
             return None
         
     def unit(self):
+
         print("I'm in unit")
+
         if self.units is True:
             self.printing("units")
             return None
@@ -47,18 +49,27 @@ class Issues():
             return None
 
     def missing_unit(self):
+
         print(f"missing units are {self.missing_units}")
         
-    def printing(self, subject):
+    def printing(self, 
+                 subject):
+
         print(f"Trying to fix {subject}")
 
-    def check_self_beta(self, headers, data):
+    def check_self_beta(self, 
+                        headers, 
+                        data):
+
         self.sheet_name()
         self.sheet1_column()
         self.unit()
         self.missing_unit()
 
-    def check_self(self, headers, data):
+    def check_self(self, 
+                   headers, 
+                   data):
+
         return None
          
     def check_sheets(self, 
@@ -76,19 +87,21 @@ class Issues():
                 Names of the sheets of an excel file
         """
 
-        if sheet_names == expected_structure.sheet_names:
+        expected_sheet_names = expected_structure["sheet_names"]
+
+        if sheet_names == expected_sheet_names:
             self.sheet_names = True
-        elif sheet_names != expected_structure.sheet_names:
-            logger.warning(f"Sheet name incorrect, expected {expected_structure.sheet_names}. got {sheet_names}")
+        elif sheet_names != expected_sheet_names:
+            logger.warning(f"Sheet name incorrect, expected {expected_sheet_names}, got {sheet_names}")
             self.sheet_names = False
         else:
             logger.error("Sheets name check could not be determined")
             self.sheet_names = False
 
     def check_column_names(self, 
-                        real_column_names: list, 
-                        expected_column_names: list, 
-                        sheet_name: str):
+                           real_column_names: list, 
+                           expected_column_names: list, 
+                           sheet_name: str):
 
 
         """
@@ -162,8 +175,6 @@ class Issues():
                 self.missing_units = no_units
             else:
                 continue
-
-        #self.issues.missing_units = no_units
 
         if checknan is True:
             self.units = False
