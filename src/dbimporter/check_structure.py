@@ -5,6 +5,7 @@ from enum import Enum
 from dbimporter.logger import logger, change_logging_level
 from typing import List
 from dbimporter.issuescheck import Issues
+from dbimporter.fix_structure import Default
 
 
 class Jsonfile(Enum):
@@ -39,6 +40,10 @@ class Check():
         if self.file_loglevel > 30:
             print("Log file must be set to severity threshold 30 or lower")
             sys.exit()
+
+        if self.issues.output_type is None:
+            self.issues.output_type = Default(filename=self.filename)
+            pass
 
         self.start(self.filename)
 
@@ -249,8 +254,10 @@ class Check():
         with open("output.json", "w") as f2:
             issue_dict = {}
             for i in self.issues.__dict__:
-                issue_dict[i] = self.issues.__dict__[i]
-            print(issue_dict)
+                if i != "output_type":
+                    issue_dict[i] = self.issues.__dict__[i]
+                else:
+                    pass
             json.dump(issue_dict, f2)
             
 

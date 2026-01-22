@@ -42,15 +42,7 @@ Turn this off by setting the no_restructure attribute to True
 
 Run the checker with the path to the file you want to check
 ```
-dbi.structcheck.Check(filename="path/to/file.xlsx")
-```
-
-###### Run restructure:
-
-To attempt a restrucure only: 
-
-```
-dbi.restructure.start(filename="path/to/file.xlsx")
+dbi.check_structure.Check(filename="path/to/file.xlsx")
 ```
 
 

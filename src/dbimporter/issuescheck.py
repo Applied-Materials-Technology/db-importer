@@ -8,11 +8,13 @@ from dbimporter.logger import logger
 class Issues():
 
     def __init__(self,
+                 output_type = None,
                  sheet_names: bool = None,
                  sheet1_columns: bool = None,
                  units: bool = None,
                  missing_units: dict = None,):
         
+        self.output_type = output_type
         self.sheet_names = sheet_names
         self.sheet1_columns = sheet1_columns
         self.units = units
@@ -44,6 +46,7 @@ class Issues():
 
         if self.units is True:
             self.printing("units")
+            self.missing_unit()
             return None
         else:
             return None
@@ -65,6 +68,8 @@ class Issues():
         self.sheet1_column()
         self.unit()
         self.missing_unit()
+        self.output_type.test()
+
 
     def check_self(self, 
                    headers, 
