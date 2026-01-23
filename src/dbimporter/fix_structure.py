@@ -9,7 +9,6 @@ class Default():
         self.filename = filename
         self.two = two
 
-        #self.start(self.filename)
 
     def read_data(self,
                   filename: str):

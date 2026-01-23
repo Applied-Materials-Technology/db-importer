@@ -22,34 +22,49 @@ class Issues():
 
     def sheet_name(self):
 
-        print("I'm in sheet name")
+        try:
+            if self.sheet_names is True:
+                self.printing("sheet_name")
 
-        if self.sheet_names is True:
-            self.printing("sheet_name")
-            return None
-        else:
+                return None
+            else:
+                return None
+            
+        except:
+            logger.warning("Could not automatically fix sheet names")
+
             return None
 
     def sheet1_column(self):
 
-        print("I'm in sheet1 column")
+        try:
+            if self.sheet1_columns is True:
+                self.printing("sheet1_column")
 
-        if self.sheet1_columns is True:
-            self.printing("sheet1_column")
-            return None
-        else:
+                return None
+            else:
+                return None
+        except:
+            logger.warning("Could not automatically fix sheet 1 names")
+
             return None
         
     def unit(self):
 
-        print("I'm in unit")
+        try:
+            if self.units is True:
+                self.printing("units")
+                self.missing_unit()
 
-        if self.units is True:
-            self.printing("units")
-            self.missing_unit()
+                return None
+            else:
+                return None
+            
+        except:
+            logger.warning("Could not automatically fix units")
+
             return None
-        else:
-            return None
+
 
     def missing_unit(self):
 
