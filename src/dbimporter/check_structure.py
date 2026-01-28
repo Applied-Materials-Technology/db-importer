@@ -13,6 +13,7 @@ class Jsonfile(Enum):
     FILE2 = "jsonpath/jsonfile2.json"
     BADDATA = "src/formatopts/baddatatest.json"
 
+
 class Check():
 
     def __init__(self,
@@ -39,13 +40,15 @@ class Check():
 
         if self.file_loglevel > 30:
             print("Log file must be set to severity threshold 30 or lower")
-            sys.exit()
+            self.file_loglevel = 30
+            #sys.exit()
 
         if self.issues.output_type is None:
             self.issues.output_type = Default(filename=self.filename)
             pass
 
         self.start(self.filename)
+
 
     def get_expected_json(self):
 
@@ -113,6 +116,7 @@ class Check():
 
         return loglevel
 
+
     def read_data(self, 
                   filename: str):
 
@@ -153,6 +157,7 @@ class Check():
 
         return sheet_names, sheets
 
+
     def read_columns(self, 
                      location: str, 
                      sheet_data: pd.core.frame.DataFrame):
@@ -182,6 +187,7 @@ class Check():
             columnlist.append(i)
 
         return columnlist
+
 
     def start(self, 
               filename: str):
@@ -263,6 +269,7 @@ class Check():
 
         self.output_message(sheet_names, sheets_data)
 
+
     def output_message(self, 
                        sheet_names: dict, 
                        sheets_data: pd.core.frame.DataFrame):
@@ -280,7 +287,6 @@ class Check():
             try_restructure = input("Attempt to resolve issue automatically?")
             if try_restructure.upper() == "Y":
                 print("******* Attempting to resolve issues automatically... *******")
-                self.issues.check_self_beta(sheet_names, sheets_data)
                 self.issues.check_self(sheet_names, sheets_data)
             else:
                 pass

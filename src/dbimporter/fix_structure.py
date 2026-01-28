@@ -1,13 +1,46 @@
 import pandas as pd
+import os
 
 class Default():
 
     def __init__(self,
                  filename = None,
-                 two: bool = None):
+                 new_filename: str = None):
         
         self.filename = filename
-        self.two = two
+        self.new_filename = new_filename
+
+        if self.new_filename == None:
+            self.new_filename = "newfile.xlsx"
+        
+        self.set_up_file()
+
+
+    def set_up_file(self):
+
+        """
+        Checks if the file name used to write the fiexed structure to already exists. Warns
+        user of overwriting existing data and allows the user to input an alternative filename
+        """
+
+        filepath = self.new_filename
+
+        exists = os.path.isfile(filepath)
+
+        if not exists:
+            pass
+        else:
+            change_filename = input(f"File {filepath} already exists. Contents will be overwritten. Press Y to give alternative filename")
+
+            if change_filename.upper() == "Y":
+                print("******* Attempting to resolve issues automatically... *******")
+                new_filename = input("Enter new filename")
+                if new_filename[-5:] != ".xlsx":
+                    new_filename = new_filename + ".xlsx"
+                self.new_filename = new_filename
+                self.set_up_file()
+            else:
+                pass
 
 
     def read_data(self,
@@ -43,6 +76,7 @@ class Default():
 
         return sheet_names, sheets
 
+
     def get_units(self,
                   headers):
 
@@ -74,9 +108,8 @@ class Default():
             except ValueError:
                 units[i] = None
 
-        #print(units)
-
         return units
+
 
     def make_new_df(self,
                     old_df_data,
@@ -118,6 +151,7 @@ class Default():
 
         return new_df
 
+
     def create_new_excel(self,
                          data, 
                          sheet_name):
@@ -133,12 +167,14 @@ class Default():
 
         """
 
-        with pd.ExcelWriter("test2.xlsx") as writer:
+        with pd.ExcelWriter(self.new_filename) as writer:
             data.to_excel(writer, sheet_name = sheet_name)
+
 
     def write_new_data(self,
                        data,
-                       sheet_name):
+                       sheet_name,
+                       new_filename=None):
 
         """
         Write the new dataframe to an exisiting Excel file
@@ -152,17 +188,18 @@ class Default():
         """
 
         try: 
-            with pd.ExcelWriter("test2.xlsx", mode='a') as writer:
+            with pd.ExcelWriter(self.new_filename, mode='a', if_sheet_exists="replace") as writer:
                 data.to_excel(writer, sheet_name = sheet_name)
-        except FileNotFoundError:
+        except FileNotFoundError as e:
+            print(f"{FileNotFoundError} {e}, creating new Excel file")
             self.create_new_excel(data, sheet_name)
-        except ValueError:
-            print("This file already exists...")
+        except ValueError as e:
+            print(f"{ValueError} {e}")
 
 
     def start(self,
               filename):
-
+        
         print("STARTING RESTRUCTURE ATTEMPT")
         headers, data = self.read_data(filename)
 
@@ -176,6 +213,9 @@ class Default():
                 self.write_new_data(new_df, i)
             except KeyError:
                 print("skipping sheet...")
+
+        return 
+
 
     def test(self,
              custom_string="mydefault"):

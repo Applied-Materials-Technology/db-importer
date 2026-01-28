@@ -20,6 +20,7 @@ class Issues():
         self.units = units
         self.missing_units = missing_units
 
+
     def sheet_name(self):
 
         try:
@@ -35,6 +36,7 @@ class Issues():
 
             return None
 
+
     def sheet1_column(self):
 
         try:
@@ -48,13 +50,27 @@ class Issues():
             logger.warning("Could not automatically fix sheet 1 names")
 
             return None
-        
+
+
     def unit(self):
+
+        """
+        Checks if any issue with the units was detected, and attempts to fix them with
+        the unti fixer
+
+        Returns
+        -------
+
+            loglevel : int | str
+                A logging level that has been verified to be a valid logging
+                level
+        """
 
         try:
             if self.units is True:
                 self.printing("units")
                 self.missing_unit()
+                self.output_type.start(self.output_type.filename)
 
                 return None
             else:
@@ -69,28 +85,27 @@ class Issues():
     def missing_unit(self):
 
         print(f"missing units are {self.missing_units}")
-        
+
+
     def printing(self, 
                  subject):
 
         print(f"Trying to fix {subject}")
 
-    def check_self_beta(self, 
-                        headers, 
-                        data):
 
+    def check_self(self,
+                   headers,
+                   data):
+        
+
+        if self.output_type.new_filename is None:
+            self.output_type.new_filename == "newfile.xlsx"
+        
         self.sheet_name()
         self.sheet1_column()
         self.unit()
         self.missing_unit()
-        self.output_type.test()
 
-
-    def check_self(self, 
-                   headers, 
-                   data):
-
-        return None
          
     def check_sheets(self, 
                      sheet_names: list,
@@ -117,6 +132,7 @@ class Issues():
         else:
             logger.error("Sheets name check could not be determined")
             self.sheet_names = False
+
 
     def check_column_names(self, 
                            real_column_names: list, 
@@ -157,6 +173,7 @@ class Issues():
         else:
             logger.error("Column name check could not be determined")
             self.sheet1_columns = False
+
 
     def check_units_nan(self, 
                     columnname: str, 
