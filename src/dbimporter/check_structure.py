@@ -1,17 +1,11 @@
 import pandas as pd
 import json
 import sys
-from enum import Enum
 from dbimporter.logger import logger, change_logging_level
 from typing import List
 from dbimporter.issuescheck import Issues
 from dbimporter.fix_structure import Default
-
-
-class Jsonfile(Enum):
-    FILE1 = "jsonpath/jsonfile1.json"
-    FILE2 = "jsonpath/jsonfile2.json"
-    BADDATA = "src/formatopts/baddatatest.json"
+from dataset import structpaths
 
 
 class Check():
@@ -67,14 +61,18 @@ class Check():
         """
 
         if self.file_type == "one":
-            filename = Jsonfile.FILE1.value
+            #filename = Jsonfile.FILE1.value
+            filename = structpaths.Jsonfile.FILE1.value
         elif self.file_type == "two":
-            filename = Jsonfile.FILE2.value
+            #filename = Jsonfile.FILE2.value
+            filename = structpaths.Jsonfile.FILE2.value
         elif self.file_type == "baddata":
-            filename = Jsonfile.BADDATA.value
+            #filename = Jsonfile.BADDATA.value
+            filename = structpaths.Jsonfile.BADDATA.value
         else:
             logger.warning(f"file structure could not be determined, defaulting to option BADDATA")
-            filename = Jsonfile.BADDATA.value
+            #filename = Jsonfile.BADDATA.value
+            filename = structpaths.Jsonfile.BADDATA.value
 
         try:
             with open(filename) as file:
