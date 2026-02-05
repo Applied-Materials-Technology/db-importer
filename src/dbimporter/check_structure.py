@@ -17,7 +17,6 @@ class Check():
                  console_loglevel: int | str = 0,
                  file_loglevel: int | str = 10,
                  no_restructure: bool = False,
-                 #issues = Issues(),
                  issues = None,
                  file_type = None,
                  expected_json = None,
@@ -41,16 +40,14 @@ class Check():
         if self.expected_json is None:
             filename, expected_json = self.get_expected_json()
             self.expected_json = expected_json
-            print(printer.wrap_warning(f"json has been set as {self.expected_json}"))
+            logger.warning(f"json has been set as {self.expected_json}")
 
         if self.file_loglevel > 30:
-            print("Log file must be set to severity threshold 30 or lower")
+            logger.error("Log file must be set to severity threshold 30 or lower, setting to 30")
             self.file_loglevel = 30
-            #sys.exit()
 
         if self.issues.output_type is None:
             self.issues.output_type = Default(filename=self.filename)
-            pass
 
         self.start(self.filename)
 
@@ -286,18 +283,20 @@ class Check():
         attrs = (getattr(self.issues, i) for i in self.issues.__dict__)
 
         if all(attrs) is False:
-            print("******* output.txt generated for overview results *******")
-            print("******* See example.log for details about report *******")
+            printer.wrap_text_star("output.txt generated for overview results")
+            printer.wrap_text_star("See example.log for details about report")
 
             try_restructure = input("Attempt to resolve issue automatically?")
             if try_restructure.upper() == "Y":
-                print("******* Attempting to resolve issues automatically... *******")
+                printer.wrap_text_star("Attempting to resolve issues automatically...")
                 self.issues.check_self(sheet_names, sheets_data)
             else:
                 pass
         
             #if failed:
-            print("******* Could not resolve... *******")#fake
+            printer.wrap_text_star("Could not resolve...")
+            if try_restructure.upper() == "Y":
+                print(f"See resolution attempt at {self.issues.output_type.new_filename}")
             print("Please correct issues manually and try again")
         else:
             print("No issues found")

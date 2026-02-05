@@ -13,25 +13,22 @@ class Default():
         if self.new_filename == None:
             self.new_filename = "newfile.xlsx"
         
-        self.set_up_file()
 
 
     def set_up_file(self):
 
         """
-        Checks if the file name used to write the fiexed structure to already exists. Warns
+        Checks if the file name used to write the fixed structure to already exists. Warns
         user of overwriting existing data and allows the user to input an alternative filename
         """
 
-        filepath = self.new_filename
-
-        exists = os.path.isfile(filepath)
+        exists = os.path.isfile(self.new_filename)
 
         if not exists:
             pass
         else:
-            change_filename = input(f"File {filepath} already exists. Contents will be overwritten. Press Y to give alternative filename")
-
+            #change_filename = input(f"File {filepath} already exists. Contents will be overwritten. Press Y to give alternative filename")
+            change_filename = input(f"File {self.new_filename} already exists. Contents will be overwritten. Press Y to give alternative filename")
             if change_filename.upper() == "Y":
                 print("******* Attempting to resolve issues automatically... *******")
                 new_filename = input("Enter new filename")
@@ -43,8 +40,7 @@ class Default():
                 pass
 
 
-    def read_data(self,
-                  filename: str):
+    def read_data(self):
 
         """
         Read from excel file to check and return dict of sheetname: sheet_data
@@ -65,10 +61,10 @@ class Default():
                 A dictionary of the sheet_names and the pandas dataframe parsed from those sheets
         """
 
-        if filename.lower().endswith('.csv'):
-            df = pd.read_csv(filename)
-        elif filename.lower().endswith('.xlsx'):
-            df = pd.ExcelFile(filename)
+        if self.filename.lower().endswith('.csv'):
+            df = pd.read_csv(self.filename)
+        elif self.filename.lower().endswith('.xlsx'):
+            df = pd.ExcelFile(self.filename)
         sheets = {}
         sheet_names = df.sheet_names
         for i in sheet_names:
@@ -197,11 +193,10 @@ class Default():
             print(f"{ValueError} {e}")
 
 
-    def start(self,
-              filename):
+    def start_units(self):
         
         print("STARTING RESTRUCTURE ATTEMPT")
-        headers, data = self.read_data(filename)
+        headers, data = self.read_data()
 
         for i in data:
             try:

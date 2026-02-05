@@ -13,20 +13,22 @@ class Issues():
                  sheet1_columns: bool = None,
                  units: bool = None,
                  missing_units: dict = None,
-                 no_log_colour: bool = False):
+                 file_overwrite: bool = False):
         
         self.output_type = output_type
         self.sheet_names = sheet_names
         self.sheet1_columns = sheet1_columns
         self.units = units
         self.missing_units = missing_units
+        self.file_overwrite = file_overwrite
 
-        logger.info("checking colour")
+
     def sheet_name(self):
 
         try:
             if self.sheet_names is True:
-                self.printing("sheet_name")
+                self.printing_subject("sheet_name")
+                self.file_overwrite = True # change: read and make changes to new file from now
 
                 return None
             else:
@@ -42,7 +44,8 @@ class Issues():
 
         try:
             if self.sheet1_columns is True:
-                self.printing("sheet1_column")
+                self.printing_subject("sheet1_column")
+                self.file_overwrite = True # change: read and make changes to new file from now
 
                 return None
             else:
@@ -69,9 +72,10 @@ class Issues():
 
         try:
             if self.units is True:
-                self.printing("units")
+                self.printing_subject("units")
                 self.missing_unit()
                 self.output_type.start(self.output_type.filename)
+                self.file_overwrite = True # change: read and make changes to new file from now
 
                 return None
             else:
@@ -86,9 +90,11 @@ class Issues():
     def missing_unit(self):
 
         print(f"missing units are {self.missing_units}")
+        self.output_type.start_units()
+        self.file_overwrite = True # change: read and make changes to new file from now
 
 
-    def printing(self, 
+    def printing_subject(self, 
                  subject):
 
         print(f"Trying to fix {subject}")
@@ -101,6 +107,8 @@ class Issues():
 
         if self.output_type.new_filename is None:
             self.output_type.new_filename == "newfile.xlsx"
+
+        self.output_type.set_up_file()
         
         self.sheet_name()
         self.sheet1_column()
