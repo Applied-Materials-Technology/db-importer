@@ -1,12 +1,14 @@
 import pandas as pd
 import json
 import sys
-from dbimporter.logger import logger, change_logging_level
+from dbimporter.logger import logger, change_logging_level, set_log_formatter
 from typing import List
 from dbimporter.issuescheck import Issues
 from dbimporter.fix_structure import Default
+from dbimporter.printing import Printer
 from dataset import structpaths
 
+printer = Printer()
 
 class Check():
 
@@ -15,9 +17,11 @@ class Check():
                  console_loglevel: int | str = 0,
                  file_loglevel: int | str = 10,
                  no_restructure: bool = False,
-                 issues = Issues(),
+                 #issues = Issues(),
+                 issues = None,
                  file_type = None,
-                 expected_json = None):
+                 expected_json = None,
+                 no_log_colour: bool = False):
         
         self.filename = filename
         self.console_loglevel = self.loglevelcheck(console_loglevel)
@@ -26,11 +30,18 @@ class Check():
         self.issues = issues
         self.file_type = file_type
         self.expected_json = expected_json
+        self.no_log_colour = no_log_colour
+
+        if self.no_log_colour is True:
+            set_log_formatter()
+
+        if self.issues == None:
+            self.issues = Issues()
 
         if self.expected_json is None:
             filename, expected_json = self.get_expected_json()
             self.expected_json = expected_json
-            print(f"json has been set as {self.expected_json}")
+            print(printer.wrap_warning(f"json has been set as {self.expected_json}"))
 
         if self.file_loglevel > 30:
             print("Log file must be set to severity threshold 30 or lower")
@@ -61,17 +72,13 @@ class Check():
         """
 
         if self.file_type == "one":
-            #filename = Jsonfile.FILE1.value
             filename = structpaths.Jsonfile.FILE1.value
         elif self.file_type == "two":
-            #filename = Jsonfile.FILE2.value
             filename = structpaths.Jsonfile.FILE2.value
         elif self.file_type == "baddata":
-            #filename = Jsonfile.BADDATA.value
             filename = structpaths.Jsonfile.BADDATA.value
         else:
             logger.warning(f"file structure could not be determined, defaulting to option BADDATA")
-            #filename = Jsonfile.BADDATA.value
             filename = structpaths.Jsonfile.BADDATA.value
 
         try:
@@ -200,7 +207,7 @@ class Check():
             filename: str
                 Path to excel file to be checked for importing
         """
-
+        
         change_logging_level(self.console_loglevel, self.file_loglevel)
 
         sheet_names, sheets_data = self.read_data(filename)

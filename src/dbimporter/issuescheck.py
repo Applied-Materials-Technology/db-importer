@@ -12,7 +12,8 @@ class Issues():
                  sheet_names: bool = None,
                  sheet1_columns: bool = None,
                  units: bool = None,
-                 missing_units: dict = None,):
+                 missing_units: dict = None,
+                 no_log_colour: bool = False):
         
         self.output_type = output_type
         self.sheet_names = sheet_names
@@ -20,7 +21,7 @@ class Issues():
         self.units = units
         self.missing_units = missing_units
 
-
+        logger.info("checking colour")
     def sheet_name(self):
 
         try:

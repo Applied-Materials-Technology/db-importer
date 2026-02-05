@@ -5,3 +5,4 @@ from dbimporter.test import *
 from dbimporter.check_structure import *
 from dbimporter.issuescheck import *
 from dbimporter.fix_structure import *
+from dbimporter.printing import *
