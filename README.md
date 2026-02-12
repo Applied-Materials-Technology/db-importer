@@ -45,4 +45,16 @@ Run the checker with the path to the file you want to check
 dbi.check_structure.Check(filename="path/to/file.xlsx")
 ```
 
+###### Settings:
+Change the console log level to remove below warning level clutter
+
+```
+dbi.check_structure.Check(filename="path/to/file.xlsx", console_loglevel = 30)
+```
+
+Toggle off colours for console logs
+
+```
+dbi.check_structure.Check(filename="path/to/file.xlsx", no_log_colour = TRUE)
+```
 
