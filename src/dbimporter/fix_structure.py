@@ -27,8 +27,7 @@ class Default():
         if not exists:
             pass
         else:
-            #change_filename = input(f"File {filepath} already exists. Contents will be overwritten. Press Y to give alternative filename")
-            change_filename = input(f"File {self.new_filename} already exists. Contents will be overwritten. Press Y to give alternative filename")
+            change_filename = input(f"File {self.new_filename} already exists. Contents will be overwritten. Press Y to give alternative filename\n")
             if change_filename.upper() == "Y":
                 print("******* Attempting to resolve issues automatically... *******")
                 new_filename = input("Enter new filename")
@@ -132,7 +131,6 @@ class Default():
         new_data = old_df_data.values.tolist()
         index_vals = old_df_data.index.values
         header_vals = old_df_data.columns.values
-        print(header_vals)
 
         new_units = [units[i] for i in units]
         for i in range(len(new_data[1])):
@@ -200,7 +198,6 @@ class Default():
 
         for i in data:
             try:
-                print(i)
                 my_data = data[i].set_index('Category')
                 entry_info = my_data.loc["Entry"]
                 units = self.get_units(entry_info)

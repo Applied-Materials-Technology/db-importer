@@ -95,7 +95,7 @@ class Issues():
 
 
     def printing_subject(self, 
-                 subject):
+                         subject):
 
         print(f"Trying to fix {subject}")
 
