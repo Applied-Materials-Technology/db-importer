@@ -1,7 +1,9 @@
 import pandas as pd
 import json
 import sys
+import os 
 from enum import Enum
+from pathlib import Path
 from typing import List
 from dbimporter.logger import logger
 
@@ -74,7 +76,6 @@ class Issues():
             if self.units is True:
                 self.printing_subject("units")
                 self.missing_unit()
-                self.output_type.start(self.output_type.filename)
                 self.file_overwrite = True # change: read and make changes to new file from now
 
                 return None
@@ -89,7 +90,7 @@ class Issues():
 
     def missing_unit(self):
 
-        print(f"missing units are {self.missing_units}")
+        print(f"Attempting to fix missing units....")
         self.output_type.start_units()
         self.file_overwrite = True # change: read and make changes to new file from now
 
@@ -97,23 +98,23 @@ class Issues():
     def printing_subject(self, 
                          subject):
 
-        print(f"Trying to fix {subject}")
+        print(f"Attempting to fix {subject}....")
 
 
     def check_self(self,
                    headers,
-                   data):
+                   data,
+                   original_file):
         
 
         if self.output_type.new_filename is None:
-            self.output_type.new_filename == "newfile.xlsx"
+            self.output_type.new_filename = Path("newfile.xlsx")
 
         self.output_type.set_up_file()
-        
+
         self.sheet_name()
         self.sheet1_column()
         self.unit()
-        self.missing_unit()
 
          
     def check_sheets(self, 

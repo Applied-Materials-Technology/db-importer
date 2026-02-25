@@ -11,7 +11,7 @@ class Default():
         self.new_filename = new_filename
 
         if self.new_filename == None:
-            self.new_filename = "newfile.xlsx"
+            self.new_filename = None
         
 
 

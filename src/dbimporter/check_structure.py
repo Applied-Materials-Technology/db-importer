@@ -289,7 +289,7 @@ class Check():
             try_restructure = input("Attempt to resolve issue automatically?")
             if try_restructure.upper() == "Y":
                 printer.wrap_text_star("Attempting to resolve issues automatically...")
-                self.issues.check_self(sheet_names, sheets_data)
+                self.issues.check_self(sheet_names, sheets_data, self.filename)
             else:
                 pass
         
