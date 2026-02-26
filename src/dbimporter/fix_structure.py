@@ -190,8 +190,30 @@ class Default():
         except ValueError as e:
             print(f"{ValueError} {e}")
 
+    def start_sheet_name(self):
 
-    def start_units(self):
+        """
+        Start the process of fixing sheet names
+
+        """
+
+        return None
+    
+    def start_sheet1_column(self):
+
+        """
+        Start the process of fixing sheet1 columns
+
+        """
+
+        return None
+
+    def start_missing_units(self):
+
+        """
+        Start the process of fixing missing units
+
+        """
         
         print("STARTING RESTRUCTURE ATTEMPT")
         headers, data = self.read_data()
@@ -205,8 +227,6 @@ class Default():
                 self.write_new_data(new_df, i)
             except KeyError:
                 print("skipping sheet...")
-
-        return 
 
 
     def test(self,

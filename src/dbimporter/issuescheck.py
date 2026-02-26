@@ -29,7 +29,8 @@ class Issues():
 
         try:
             if self.sheet_names is True:
-                self.printing_subject("sheet_name")
+                self.printing_subject("sheet names")
+                self.output_type.start_sheet_name()
                 self.file_overwrite = True # change: read and make changes to new file from now
 
                 return None
@@ -46,7 +47,8 @@ class Issues():
 
         try:
             if self.sheet1_columns is True:
-                self.printing_subject("sheet1_column")
+                self.printing_subject("sheet1 columns")
+                self.output_type.start_sheet1_column()
                 self.file_overwrite = True # change: read and make changes to new file from now
 
                 return None
@@ -75,7 +77,7 @@ class Issues():
         try:
             if self.units is True:
                 self.printing_subject("units")
-                self.missing_unit()
+                self.output_type.start_missing_units()
                 self.file_overwrite = True # change: read and make changes to new file from now
 
                 return None
@@ -88,15 +90,12 @@ class Issues():
             return None
 
 
-    def missing_unit(self):
-
-        print(f"Attempting to fix missing units....")
-        self.output_type.start_units()
-        self.file_overwrite = True # change: read and make changes to new file from now
-
-
     def printing_subject(self, 
                          subject):
+        
+        """
+        Indicate to the use what is currently being restructered
+        """
 
         print(f"Attempting to fix {subject}....")
 
