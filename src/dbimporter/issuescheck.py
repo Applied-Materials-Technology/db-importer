@@ -99,6 +99,13 @@ class Issues():
 
         print(f"Attempting to fix {subject}....")
 
+    # def fix_file(self, 
+    #              filename, 
+    #              issuesfile):
+        
+    #     for i in issuesfile:
+    #         print(i)
+
 
     def check_self(self,
                    headers,
@@ -229,3 +236,52 @@ class Issues():
         else:
             logger.error("Unit existence check could not be determined")
             self.units = False
+
+def fix_file(filename, 
+             issuesfile):
+    
+    """
+    
+        Start the process of fixing issues with an issues json
+
+
+        Parameters
+        ----------
+
+            filename: Path
+                The path to the file to be restructured
+            issuesfile: Path
+                The path to the file that has the issues information
+
+    """
+    
+    try:
+        with open(issuesfile) as myissues:
+            issues_json = json.load(myissues)
+    except:
+        logger.error(f"Json file {filename} could not be opened")
+        issues_json = None
+
+    issues = Issues()
+    issues.sheet_names = issues_json["sheet_names"]
+    issues.sheet1_columns = issues_json["sheet1_columns"]
+    issues.units = issues_json["units"]
+    issues.missing_units = issues_json["missing_units"]
+
+
+    if filename.lower().endswith('.csv'):
+        df = pd.read_csv(filename, on_bad_lines='skip')
+    elif filename.lower().endswith('.xlsx'):
+        df = pd.ExcelFile(filename)
+
+    try:
+        sheets = {}
+        sheet_names = df.sheet_names
+        for i in sheet_names:
+            sheets[i] = df.parse(i)
+    except AttributeError:
+        logger.info("File format has no sheets")
+        sheet_names = [filename]
+        sheets = {filename: df}
+
+    issues.check_self(sheet_names, sheets, filename)
