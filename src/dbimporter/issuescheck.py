@@ -6,6 +6,7 @@ from enum import Enum
 from pathlib import Path
 from typing import List
 from dbimporter.logger import logger
+from dbimporter.fix_structure import Default
 
 class Issues():
 
@@ -27,11 +28,15 @@ class Issues():
 
     def sheet_name(self):
 
+        """
+        Checks if any issue with the sheet names were detected
+        """
+
         try:
             if self.sheet_names is True:
                 self.printing_subject("sheet names")
                 self.output_type.start_sheet_name()
-                self.file_overwrite = True # change: read and make changes to new file from now
+                self.file_overwrite = True 
 
                 return None
             else:
@@ -45,11 +50,15 @@ class Issues():
 
     def sheet1_column(self):
 
+        """
+        Checks if any issue with the sheet1 column was detected
+        """
+
         try:
             if self.sheet1_columns is True:
                 self.printing_subject("sheet1 columns")
                 self.output_type.start_sheet1_column()
-                self.file_overwrite = True # change: read and make changes to new file from now
+                self.file_overwrite = True
 
                 return None
             else:
@@ -64,21 +73,14 @@ class Issues():
 
         """
         Checks if any issue with the units was detected, and attempts to fix them with
-        the unti fixer
-
-        Returns
-        -------
-
-            loglevel : int | str
-                A logging level that has been verified to be a valid logging
-                level
+        the unit fixer
         """
 
         try:
             if self.units is True:
                 self.printing_subject("units")
                 self.output_type.start_missing_units()
-                self.file_overwrite = True # change: read and make changes to new file from now
+                self.file_overwrite = True
 
                 return None
             else:
@@ -91,7 +93,7 @@ class Issues():
 
 
     def printing_subject(self, 
-                         subject):
+                         subject: str):
         
         """
         Indicate to the use what is currently being restructered
@@ -99,18 +101,11 @@ class Issues():
 
         print(f"Attempting to fix {subject}....")
 
-    # def fix_file(self, 
-    #              filename, 
-    #              issuesfile):
-        
-    #     for i in issuesfile:
-    #         print(i)
-
 
     def check_self(self,
-                   headers,
-                   data,
-                   original_file):
+                   headers: List,
+                   data: dict,
+                   original_file: Path):
         
 
         if self.output_type.new_filename is None:
@@ -125,7 +120,7 @@ class Issues():
          
     def check_sheets(self, 
                      sheet_names: list,
-                     expected_structure):
+                     expected_structure: dict):
 
         """
         Check if the sheets are the expected names, and mark as true if correct
@@ -192,9 +187,9 @@ class Issues():
 
 
     def check_units_nan(self, 
-                    columnname: str, 
-                    unitlist: list, 
-                    sheet_name: str):
+                        columnname: str, 
+                        unitlist: list, 
+                        sheet_name: str):
 
         """
         Check if there are any nan units, checks box if there are none
@@ -237,8 +232,9 @@ class Issues():
             logger.error("Unit existence check could not be determined")
             self.units = False
 
-def fix_file(filename, 
-             issuesfile):
+
+def fix_file(filename: Path, 
+             issuesfile: Path):
     
     """
     
@@ -262,7 +258,7 @@ def fix_file(filename,
         logger.error(f"Json file {filename} could not be opened")
         issues_json = None
 
-    issues = Issues()
+    issues = Issues(output_type=Default(filename=filename))
     issues.sheet_names = issues_json["sheet_names"]
     issues.sheet1_columns = issues_json["sheet1_columns"]
     issues.units = issues_json["units"]
