@@ -74,6 +74,8 @@ class Check():
             filename = structpaths.Jsonfile.FILE2.value
         elif self.file_type == "baddata":
             filename = structpaths.Jsonfile.BADDATA.value
+        elif self.file_type == "tensiledata":
+            filename = structpaths.Jsonfile.TENSILEDATA.value
         else:
             logger.warning(f"file structure could not be determined, defaulting to option BADDATA")
             filename = structpaths.Jsonfile.BADDATA.value
