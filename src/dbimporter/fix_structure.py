@@ -3,6 +3,18 @@ import os
 
 class Default():
 
+    """
+        Check the file
+
+        Parameters
+        -------
+
+            filename
+                The file to be reading from
+            new_filename: str
+                The name of the new file that the restructure will be saved to
+    """
+
     def __init__(self,
                  filename = None,
                  new_filename: str = None):

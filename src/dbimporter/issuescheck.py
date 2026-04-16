@@ -10,6 +10,30 @@ from dbimporter.fix_structure import Default
 
 class Issues():
 
+    """
+        Check the file
+
+        Parameters
+        -------
+
+            output_types
+                The fixer that will be used for restructure
+            sheet_names: bool
+                Whether or not an issue was found with sheet names.
+                Set to True is error is found.
+            sheet1_columns: bool
+                Whether or not an issue was found with sheet1 column names.
+                Set to True is error is found.
+            units: bool
+                Whether or not an issue was found with units.
+                Set to True is error is found.
+            missing_units: dict
+                What units are missing from the structure
+            file_overwrite: bool
+                Toggle if original file is overwritten during restructure
+                Defaults to False
+    """
+
     def __init__(self,
                  output_type = None,
                  sheet_names: bool = None,

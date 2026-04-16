@@ -12,6 +12,35 @@ printer = Printer()
 
 class Check():
 
+    """
+        Check the file
+
+        Parameters
+        -------
+
+            filename : str
+                The name of the json file that contains the expected data structure
+                for the provided file
+            console_loglevel: int | str
+                Lowest level of logs to display in the console
+                Defaults to 0 (show all logs)
+            file_loglevel: int | str
+                Lowest level of logs to write to the log file
+                Defaults to 10 (Write all logs)
+            no_restructure: bool
+                Turn off asking attempts to restructure files that failed checks
+                Defaults to False
+            issues
+                Class that checks issues and stores default
+            file_type
+                Name of the file type
+            expected_json
+                Structure info about specific file type specified
+            no_log_colour: bool
+                Turn off colouring of logs in console.
+                Defaults to False
+    """
+
     def __init__(self,
                  filename: str = None,
                  console_loglevel: int | str = 0,
