@@ -64,7 +64,7 @@ class Check():
             set_log_formatter()
 
         if self.issues == None:
-            self.issues = Issues()
+            self.issues = Issues(general_output="my_output.json")
 
         if self.expected_json is None:
             filename, expected_json = self.get_expected_json()

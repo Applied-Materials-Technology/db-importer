@@ -40,7 +40,8 @@ class Issues():
                  sheet1_columns: bool = None,
                  units: bool = None,
                  missing_units: dict = None,
-                 file_overwrite: bool = False):
+                 file_overwrite: bool = False,
+                 general_output: str = None):
         
         self.output_type = output_type
         self.sheet_names = sheet_names
@@ -48,7 +49,12 @@ class Issues():
         self.units = units
         self.missing_units = missing_units
         self.file_overwrite = file_overwrite
+        self.general_output = general_output
 
+    def make_general_output(self, attribute, value):
+        with open(self.general_output, "w") as f:
+            f.write(attribute+": "+value+"\n")
+            f.close()
 
     def sheet_name(self):
 
