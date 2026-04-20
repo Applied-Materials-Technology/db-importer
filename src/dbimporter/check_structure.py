@@ -49,7 +49,8 @@ class Check():
                  issues = None,
                  file_type = None,
                  expected_json = None,
-                 no_log_colour: bool = False):
+                 no_log_colour: bool = False,
+                 automatic_start: bool = False):
         
         self.filename = filename
         self.console_loglevel = self.loglevelcheck(console_loglevel)
@@ -59,6 +60,7 @@ class Check():
         self.file_type = file_type
         self.expected_json = expected_json
         self.no_log_colour = no_log_colour
+        self.automatic_start = automatic_start
 
         if self.no_log_colour is True:
             set_log_formatter()
@@ -78,7 +80,8 @@ class Check():
         if self.issues.output_type is None:
             self.issues.output_type = Default(filename=self.filename)
 
-        self.start(self.filename)
+        if self.automatic_start == True:
+            self.start(self.filename)
 
 
     def get_expected_json(self):
@@ -97,7 +100,10 @@ class Check():
                 The data from the settings json file
         """
 
-        if self.file_type == "one":
+        if self.file_type == None:
+            logger.warning(f"file structure not set, defaulting to option BADDATA")
+            filename = structpaths.Jsonfile.BADDATA.value
+        elif self.file_type == "one":
             filename = structpaths.Jsonfile.FILE1.value
         elif self.file_type == "two":
             filename = structpaths.Jsonfile.FILE2.value
