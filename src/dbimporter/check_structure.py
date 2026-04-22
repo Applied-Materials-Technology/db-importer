@@ -39,6 +39,9 @@ class Check():
             no_log_colour: bool
                 Turn off colouring of logs in console.
                 Defaults to False
+            automatic_start: bool
+                Whether the checker runs after the Checker has been created
+
     """
 
     def __init__(self,

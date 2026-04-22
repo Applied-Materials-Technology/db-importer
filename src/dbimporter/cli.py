@@ -1,46 +1,28 @@
 import click
 
-def start():
+from dbimporter.issuescheck import Issues
+from dbimporter.fix_structure import Default
+from dbimporter.printing import Printer
+from dbimporter.check_structure import Check
+from dbimporter.watcher import Watcher
 
-    print("Hello world")
-
-def some_function(folder, add, edit):
-    return None
 
 @click.group(invoke_without_command=False)
 @click.version_option()
 def cli():
     pass
 
+@cli.command()
+@click.option('--automatic', '-x', is_flag=True, help="Whether the checker runs after the Checker has been created")
+@click.option('--filename', default="src/dbimporter/data/find_unit_test.xlsx", help="path to json file to read structure")
+
+def runcode(filename, automatic):
+    Check(filename=filename, automatic_start=automatic)
+
+@click.option('--watchpath', default=".")
 
 @cli.command()
-@click.option(
-    "--folder",
-    "-f",
-    default="",
-    help="Specify a folder to filter the notes (leave empty to get all).",
-)
-@click.option(
-    "--add",
-    "-a",
-    is_flag=True,
-    help="Add a note to the specified folder. Specify a folder using the --folder flag.",
-)
-@click.option(
-    "--edit",
-    "-e",
-    is_flag=True,
-    help="Edit a note in the specified folder. Specify a folder using the --folder flag.",
-)
-
-def notes(
-    folder, add, edit,):
-
-    some_function(folder, edit, add)
-
-    if edit:
-        print("I've edit")
-        return None
-    if add:
-        print("I've add")
-        return None
+def watch(watchpath):
+    my_watcher = Watcher(watch_path=watchpath)
+    print(my_watcher.watch_path)
+    my_watcher.run()
