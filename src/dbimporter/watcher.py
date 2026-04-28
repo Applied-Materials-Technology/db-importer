@@ -12,16 +12,18 @@ class Watcher:
     """
 
     def __init__(self, 
-                 watch_path: Path | None = None) -> None:
+                 watch_path: Path,
+                 checker):
 
 
         self.watch_path = watch_path
+        self.checker = checker
         self.observer = Observer()
 
 
     def run(self):
 
-        event_handler = Handler()
+        event_handler = Handler(self.checker)
         self.watch_path = self.watch_path
         self.observer.schedule(event_handler, self.watch_path, recursive = True)
         self.observer.start()
@@ -42,6 +44,11 @@ class Handler(FileSystemEventHandler):
     """
     Decide what to do when certain events are detected in the watched directory
     """
+
+    def __init__(self, checker): 
+        self.checker = checker
+
+        print(self.checker)
 
     def on_any_event(self,event):
 

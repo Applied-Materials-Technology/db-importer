@@ -40,7 +40,8 @@ class Check():
                 Turn off colouring of logs in console.
                 Defaults to False
             automatic_start: bool
-                Whether the checker runs after the Checker has been created
+                Whether the checker runs after the Checker has been created. Set to 
+                False to set Checker settings before checks
 
     """
 
@@ -53,7 +54,7 @@ class Check():
                  file_type = None,
                  expected_json = None,
                  no_log_colour: bool = False,
-                 automatic_start: bool = False):
+                 automatic_start: bool = True):
         
         self.filename = filename
         self.console_loglevel = self.loglevelcheck(console_loglevel)
