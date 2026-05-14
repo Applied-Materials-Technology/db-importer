@@ -1,4 +1,3 @@
-import pytest
 import dbimporter as dbi
 
 testdata = [(10, 10),

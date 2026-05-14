@@ -54,22 +54,22 @@ class Default():
     def read_data(self):
 
         """
-        Read from excel file to check and return dict of sheetname: sheet_data
+            Read from excel file to check and return dict of sheetname: sheet_data
 
 
-        Parameters
-        ----------
+            Parameters
+            ----------
 
-            filename: str
-                Path to excel file to be checked for importing
+                filename: str
+                    Path to excel file to be checked for importing
 
-        Returns
-        -------
+            Returns
+            -------
 
-            sheet_names : list
-                A list of the sheet names from the file being read
-            sheets : dict
-                A dictionary of the sheet_names and the pandas dataframe parsed from those sheets
+                sheet_names : list
+                    A list of the sheet names from the file being read
+                sheets : dict
+                    A dictionary of the sheet_names and the pandas dataframe parsed from those sheets
         """
 
         if self.filename.lower().endswith('.csv'):

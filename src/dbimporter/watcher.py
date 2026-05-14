@@ -4,26 +4,33 @@ from watchdog.events import FileSystemEventHandler
 from pathlib import Path
 import numpy as np
 
+from dbimporter.check_structure import Check
+
 
 class Watcher:
 
     """
-    Watches the specified directory for new files
+        Watches the specified directory for new files
     """
 
     def __init__(self, 
                  watch_path: Path,
-                 checker):
+                 checkopts: None):
 
 
         self.watch_path = watch_path
-        self.checker = checker
+        self.checkopts = checkopts
         self.observer = Observer()
+
 
 
     def run(self):
 
-        event_handler = Handler(self.checker)
+        """
+            Start running the handler that will look for incoming files
+        """
+
+        event_handler = Handler(self.checkopts)
         self.watch_path = self.watch_path
         self.observer.schedule(event_handler, self.watch_path, recursive = True)
         self.observer.start()
@@ -42,13 +49,14 @@ class Watcher:
 class Handler(FileSystemEventHandler):
 
     """
-    Decide what to do when certain events are detected in the watched directory
+        Decide what to do when certain events are detected in the watched directory
     """
 
-    def __init__(self, checker): 
-        self.checker = checker
+    def __init__(self,
+                 checkopts): 
+        
+        self.checkopts = checkopts
 
-        print(self.checker)
 
     def on_any_event(self,event):
 
@@ -70,10 +78,21 @@ class Handler(FileSystemEventHandler):
 
 def event_decider(event):
 
+    """
+        Attempts to check file when it is detected and able to be read
+
+        Parameters
+        ----------
+
+            event : 
+                Details of the watchdog event that has been detected 
+    """
+
+    print("Attempting to open file...")
+
     try:
-        print("file")
+        Check(filename=event.src_path, automatic_start=True)
 
     except:
-        print("fail")
-
+        #check what the error should be
         event_decider(event)
