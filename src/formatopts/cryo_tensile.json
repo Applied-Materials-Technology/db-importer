@@ -1,0 +1,9 @@
+{
+    "sheet_names": ["filename"],
+    "columns": ["time", "displacement", "force", "eng.stress", "eng.strain", "camera noise"],
+    "column_units": ["s", "mm", "kN", "mPa", "%", "%"],
+    "optional": ["false", "false", "false", "false", "false", "false"],
+    "sample_info": ["sample name", "diameter", "area"],
+    "sample_units": ["none", "mm", "mm^2"],
+    "curve": ["true"]
+}

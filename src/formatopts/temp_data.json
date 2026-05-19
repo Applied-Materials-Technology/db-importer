@@ -1,0 +1,7 @@
+{
+    "sheet_names": ["Sheet 1"],
+    "columns": ["time", "loading pin ave", "loading pin min", "loading pin max"],
+    "column_units": ["s", "C", "C", "C"],
+    "optional": ["false", "false", "false", "false", "false", "false"],
+    "curve": ["true"]
+}
