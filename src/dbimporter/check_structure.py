@@ -104,20 +104,7 @@ class Check():
                 The data from the settings json file
         """
 
-        if self.file_type == None:
-            logger.warning(f"file structure not set, defaulting to option BADDATA")
-            filename = structpaths.Jsonfile.BADDATA.value
-        elif self.file_type == "one":
-            filename = structpaths.Jsonfile.FILE1.value
-        elif self.file_type == "two":
-            filename = structpaths.Jsonfile.FILE2.value
-        elif self.file_type == "baddata":
-            filename = structpaths.Jsonfile.BADDATA.value
-        elif self.file_type == "tensiledata":
-            filename = structpaths.Jsonfile.TENSILEDATA.value
-        else:
-            logger.warning(f"file structure could not be determined, defaulting to option BADDATA")
-            filename = structpaths.Jsonfile.BADDATA.value
+        filename = structpaths.set_json(self.file_type)
 
         try:
             with open(filename) as file:
