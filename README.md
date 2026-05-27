@@ -30,6 +30,8 @@ pip install -e .
 
 ## Getting Started
 
+### Use in .py File
+
 Import at the top of your code file
 ```
 import dbimporter as dbi
@@ -57,4 +59,16 @@ Toggle off colours for console logs
 ```
 dbi.check_structure.Check(filename="path/to/file.xlsx", no_log_colour = TRUE)
 ```
+
+### CLI
+
+Run in CLI with the dbi CLI tool
+
+```
+dbi check [filename] -x [watchpath]
+```
+Where:
+- filename is the name of the file to check
+- The '-x' flag indicates that checking will start automatically after setting up the checker
+- watchpath is the path to the file to be checked, default set to '.'
 

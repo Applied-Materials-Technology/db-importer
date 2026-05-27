@@ -43,35 +43,39 @@ def cli():
 
 modify_usage_error(cli)
 
-#@cli.command()
-@click.option('--automatic', '-x', is_flag=True, help="Whether the checker runs after the Checker has been created")
-@click.option('--filename', default="src/dbimporter/data/find_unit_test.xlsx", help="path to json file to read structure")
-@cli.command()
+
 def runcode(filename, automatic):
 
     my_checker = Check(filename=filename, automatic_start=automatic)
     return my_checker
 
 
-@click.option('--watchpath', default=".")
-@click.option('--checkopts', default=None)
-@cli.command()
 def watch(watchpath, checkopts):
 
     my_watcher = Watcher(watch_path=watchpath, checkopts=checkopts)
     print(my_watcher.watch_path)
     my_watcher.run()
 
-
+@cli.command()
 @click.option('--automatic', '-x', is_flag=True, help="Whether the checker runs after the Checker has been created")
 @click.option('--filename', default="src/dbimporter/data/find_unit_test.xlsx", help="path to json file to read structure")
 @click.option('--watchpath', default=".", help="the path to where the file to be checked will be")
-@cli.command()
 def check(filename, automatic, watchpath):
 
-    my_checker = runcode(standalone_mode = False)
-    my_watcher = Watcher(watch_path=watchpath, checker=my_checker)
-    my_watcher.run()
+    """
+        Set up file checks
+
+        Parameters
+        ----------
+            filename : str
+                Name of the file to be checked
+            automatic : bool
+                Whether to start checking automatically. Flag -x, defaults False
+            watchpath : str
+                Where the file to be checked is. Defaults to '.'
+    """
+
+    my_checker = runcode(filename, automatic = automatic)
 
 @cli.command()
 @click.option('--name', default="user", help="name to be echoed back in test string")
@@ -79,7 +83,7 @@ def working(name):
 
 
     """
-        Test if CLI functional. Sould return "I am working, {name}
+        Test if CLI functional. Should return "I am working, {name}
 
         Parameters
         ----------
