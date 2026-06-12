@@ -211,10 +211,13 @@ class Check():
                 A list of the column names from a given sheet
         """
 
-        columnnames = sheet_data.iloc[location]
-        columnlist = []
-        for i in columnnames:
-            columnlist.append(i)
+        if self.expected_json["true_col"] == ["true"]:
+            columnlist = list(sheet_data.columns.values)
+        else:
+            columnnames = sheet_data.iloc[location]
+            columnlist = []
+            for i in columnnames:
+                columnlist.append(i)
 
         return columnlist
 
@@ -240,9 +243,12 @@ class Check():
         for i in sheet_names:         
 
             data_column_name = self.read_columns(0, sheets_data[i])
+            print(f"data_column_name is {data_column_name}")
+
+            jsoncolsdata = "cols"+"_"+i
 
             try:
-                expect_col_names = self.expected_json[i]
+                expect_col_names = self.expected_json[jsoncolsdata]
             except AttributeError:
                 logger.debug(f"still in testing mode: sheet names have no associated data")
                 expect_col_names = ["Entry", "Material", "Heat", "Product", "Sub-product", "Test_Lab", "Specimen ID", "Internal ID"]
