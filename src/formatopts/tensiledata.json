@@ -4,5 +4,6 @@
     "heattreatment": ["size of unit", "heat treatment paramaters"],
     "testpiece": ["location", "orientation", "geometry", "orientation in source"],
     "testing": ["dimensions", "roughness", "test type", "test standard", "lab", "test machine", "test environment"],
-    "datainfo": ["location"]
+    "datainfo": ["location"],
+    "true_col": ["true"]
 }

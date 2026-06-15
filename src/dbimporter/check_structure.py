@@ -211,13 +211,17 @@ class Check():
                 A list of the column names from a given sheet
         """
 
-        if self.expected_json["true_col"] == ["true"]:
+        try:
+            if self.expected_json["true_col"] == ["true"]:
+                columnlist = list(sheet_data.columns.values)
+            else:
+                columnnames = sheet_data.iloc[location]
+                columnlist = []
+                for i in columnnames:
+                    columnlist.append(i)
+        except KeyError:
+            logger.info("Could not find true_col specifier, setting to true automatically")
             columnlist = list(sheet_data.columns.values)
-        else:
-            columnnames = sheet_data.iloc[location]
-            columnlist = []
-            for i in columnnames:
-                columnlist.append(i)
 
         return columnlist
 
