@@ -2,7 +2,7 @@ import click
 import sys
 
 from dbimporter.issuescheck import Issues
-from dbimporter.fix_structure import Default
+from dbimporter.fix_structure.default import Default
 from dbimporter.printing import Printer
 from dbimporter.check_structure import Check
 from dbimporter.watcher import Watcher

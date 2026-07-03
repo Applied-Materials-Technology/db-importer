@@ -17,10 +17,14 @@ class Default():
 
     def __init__(self,
                  filename = None,
-                 new_filename: str = None):
+                 new_filename: str = None,
+                 headers = None,
+                 data = None):
         
         self.filename = filename
         self.new_filename = new_filename
+        self.headers = headers
+        self.data = data
 
         if self.new_filename == None:
             self.new_filename = None
@@ -209,6 +213,8 @@ class Default():
 
         """
 
+        print("Attempting to fix sheet names...")
+
         return None
     
     def start_sheet1_column(self):
@@ -217,6 +223,8 @@ class Default():
         Start the process of fixing sheet1 columns
 
         """
+
+        print("Attempting to fix sheet1 columns...")
 
         return None
 
@@ -227,21 +235,27 @@ class Default():
 
         """
         
-        print("STARTING RESTRUCTURE ATTEMPT")
-        headers, data = self.read_data()
+        #print("STARTING RESTRUCTURE ATTEMPT")
+        #headers, data = self.read_data()
 
-        for i in data:
+        print("Attempting to fix missing units...")
+
+        for i in self.data:
             try:
-                my_data = data[i].set_index('Category')
+                my_data = self.data[i].set_index('Category')
                 entry_info = my_data.loc["Entry"]
                 units = self.get_units(entry_info)
                 new_df = self.make_new_df(my_data, units)
                 self.write_new_data(new_df, i)
             except KeyError:
-                print("skipping sheet...")
+                print(f"skipping sheet {i}...")
 
+    def set_data(self):
 
-    def test(self,
-             custom_string="mydefault"):
-        
-        print(f"I am in default with {custom_string}")
+        print("STARTING RESTRUCTURE ATTEMPT - Default")
+
+        headers, data = self.read_data()
+        # print(headers)
+        # print(data)
+        self.headers = headers
+        self.data = data

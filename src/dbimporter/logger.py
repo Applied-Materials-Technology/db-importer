@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 logger.setLevel(logging.DEBUG)
 
-file_handler = logging.handlers.RotatingFileHandler(f"{__name__}example.log", mode = 'w', backupCount = 5)
+file_handler = logging.handlers.RotatingFileHandler(f"{__name__}.details.log", mode = 'w', backupCount = 5)
 
 console_handler = logging.StreamHandler()
 

@@ -1,10 +1,11 @@
 import pandas as pd
 import json
 import sys
+from pathlib import Path
 from dbimporter.logger import logger, change_logging_level, set_log_formatter
 from typing import List
 from dbimporter.issuescheck import Issues
-from dbimporter.fix_structure import Default
+from dbimporter.fix_structure import *
 from dbimporter.printing import Printer
 from dataset import structpaths
 
@@ -81,15 +82,26 @@ class Check():
             logger.error("Log file must be set to severity threshold 30 or lower, setting to 30")
             self.file_loglevel = 30
 
-        if self.issues.output_type is None:
-            self.issues.output_type = Default(filename=self.filename)
+        self.set_output_type()
 
         if self.automatic_start == True:
             self.start(self.filename)
 
+    def set_output_type(self):
+
+        """
+        Chooses the associated restructure code for the file input.
+        
+        """
+
+        if self.file_type is None:
+            self.file_type = "default"
+        if self.file_type == "default":
+            self.issues.output_type = default.Default(filename=self.filename)
+        if self.file_type == "tensile":
+            self.issues.output_type = tensile.Tensile(filename=self.filename)
 
     def get_expected_json(self):
-
 
         """
         Chooses the associated json settings for the file type provided.
@@ -291,13 +303,16 @@ class Check():
             sheets : dict
                 A dictionary of the sheet_names and the pandas dataframe parsed from those sheets
         """
+        output_dir = Path("output")
+        output_dir.mkdir(parents=True, exist_ok=True)
 
-        with open("output.txt", "w") as f:
+        #with open("output/output.txt", "w") as f:
+        with open(output_dir / "output.txt", "w") as f:
             for i in self.issues.__dict__:
                 f.write(i+": "+str(self.issues.__dict__[i])+"\n")
             f.close()
 
-        with open("output.json", "w") as f2:
+        with open(output_dir / "output.json", "w") as f2:
             issue_dict = {}
             for i in self.issues.__dict__:
                 if i != "output_type":
@@ -321,10 +336,10 @@ class Check():
         attrs = (getattr(self.issues, i) for i in self.issues.__dict__)
 
         if all(attrs) is False:
-            printer.wrap_text_star("output.txt generated for overview results")
-            printer.wrap_text_star("See example.log for details about report")
+            printer.wrap_text_star("output/output.txt generated for overview results")
+            printer.wrap_text_star("See dbimporter.logger.details.log for details about report")
 
-            try_restructure = input("Attempt to resolve issue automatically?")
+            try_restructure = input("Attempt to resolve issue automatically? (Y/N)\n")
             if try_restructure.upper() == "Y":
                 printer.wrap_text_star("Attempting to resolve issues automatically...")
                 self.issues.check_self(sheet_names, sheets_data, self.filename)

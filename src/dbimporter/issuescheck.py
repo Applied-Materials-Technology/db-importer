@@ -6,7 +6,7 @@ from enum import Enum
 from pathlib import Path
 from typing import List
 from dbimporter.logger import logger
-from dbimporter.fix_structure import Default
+from dbimporter.fix_structure.default import Default
 
 class Issues():
 
@@ -129,7 +129,7 @@ class Issues():
         Indicate to the use what is currently being restructered
         """
 
-        print(f"Attempting to fix {subject}....")
+        print(f"Checking for {subject}....")
 
 
     def check_self(self,
@@ -139,10 +139,11 @@ class Issues():
         
 
         if self.output_type.new_filename is None:
-            self.output_type.new_filename = Path("newfile.xlsx")
+            self.output_type.new_filename = Path("restructure_attempt.xlsx")
 
         self.output_type.set_up_file()
 
+        self.output_type.set_data()
         self.sheet_name()
         self.sheet1_column()
         self.unit()
