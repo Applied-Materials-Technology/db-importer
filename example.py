@@ -1,4 +1,5 @@
 import dbimporter as dbi
+import gui as dbigui
 
 
 dbi.check_structure.Check(filename="src/dbimporter/data/find_unit_test.xlsx", 
@@ -12,4 +13,3 @@ dbi.check_structure.Check(filename="src/dbimporter/data/find_unit_test.xlsx",
 
 # print(sheetdata.head(3))
 
-#dbi.graph_extract.get_image_test(filename="src/dbimporter/data/Rod #8- 3.4.2-10%-test data at cryo -75C.xlsx")

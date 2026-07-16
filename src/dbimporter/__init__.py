@@ -7,3 +7,5 @@ from dbimporter.issuescheck import *
 #from dbimporter.fix_structure.default import *
 from dbimporter.fix_structure import *
 from dbimporter.printing import *
+from gui.gui import *
+from dbimporter.start_gui import *
