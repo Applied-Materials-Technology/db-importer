@@ -338,22 +338,24 @@ class Check():
         if all(attrs) is False:
             printer.wrap_text_star("output/output.txt generated for overview results")
             printer.wrap_text_star("See dbimporter.logger.details.log for details about report")
-
-            try_restructure = input("Attempt to resolve issue automatically? (Y/N)\n")
-            if try_restructure.upper() == "Y":
-                printer.wrap_text_star("Attempting to resolve issues automatically...")
-                self.issues.check_self(sheet_names, sheets_data, self.filename)
-            else:
-                pass
-
-            new_attrs = (getattr(self.issues, i) for i in self.issues.__dict__)
-
-            if all(new_attrs) is False:
-                #if failed:
-                printer.wrap_text_star("Could not resolve...")
+            if self.no_restructure==False:
+                try_restructure = input("Attempt to resolve issue automatically? (Y/N)\n")
                 if try_restructure.upper() == "Y":
-                    print(f"See resolution attempt at {self.issues.output_type.new_filename}")
-                print("Please correct issues manually and try again")
+                    printer.wrap_text_star("Attempting to resolve issues automatically...")
+                    self.issues.check_self(sheet_names, sheets_data, self.filename)
+                else:
+                    pass
+
+                new_attrs = (getattr(self.issues, i) for i in self.issues.__dict__)
+
+                if all(new_attrs) is False:
+                    #if failed:
+                    printer.wrap_text_star("Could not resolve...")
+                    if try_restructure.upper() == "Y":
+                        print(f"See resolution attempt at {self.issues.output_type.new_filename}")
+                    print("Please correct issues manually and try again")
+            else:
+                print("Please fix issues manually")
         else:
             print("No issues found")
             print("May proceed to ingestion attempt")

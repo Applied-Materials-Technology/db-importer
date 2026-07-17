@@ -1,43 +1,30 @@
+import os
 import tkinter as tk 
 from tkinter import ttk
+from tkinter import filedialog
+from dbimporter import check_structure
 
-LARGEFONT =("Verdana", 35)
+LARGEFONT = ("Verdana", 24) # Reduced slightly for better scaling
 
 class Application(tk.Tk):
-	
-	# __init__ function for class tkinterApp
     def __init__(self, *args, **kwargs):
-		
-		# __init__ function for class Tk
         tk.Tk.__init__(self, *args, **kwargs)
-		
-		# creating a container
+        
         container = tk.Frame(self)
         container.pack(side = "top", fill = "both", expand = True)
 
         container.grid_rowconfigure(0, weight = 1)
         container.grid_columnconfigure(0, weight = 1)
 
-		# initializing frames to an empty array
         self.frames = {}
 
-		# iterating through a tuple consisting
-		# of the different page layouts
-        for page in (All, All2):
-
+        for page in (All,): 
             frame = page(container, self)
-
-			# initializing frame of that object from
-			# startpage, page1, page2 respectively with
-			# for loop
             self.frames[page] = frame
-
             frame.grid(row = 0, column = 0, sticky ="nsew")
 
         self.show_frame(All)
 
-	# to display the current frame passed as
-	# parameter
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
@@ -45,28 +32,84 @@ class Application(tk.Tk):
 class All(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-		
-		# label of frame Layout 2
-        label = ttk.Label(self, text ="All characters", font = LARGEFONT)
-		
-		# putting the grid in its place by using
-		# grid
-        label.grid(row = 0, column = 4, padx = 10, pady = 10)
+        
+        label = ttk.Label(self, text ="DBImporter", font = LARGEFONT)
+        label.grid(row = 0, column = 0, padx = 10, pady = 10)
 
-class All2(tk.Frame):
+        label = ttk.Label(self, text="Select file...")
+        label.grid(row = 1, column = 0, padx = 10, pady = 10)
+
+        file_btn = ttk.Button(
+            self, 
+            text="File", 
+            command=self.open_file_dialogue)
+        
+        file_btn.grid(row = 1, column = 1, pady = 10)
+
+        self.output_box = Output(self, controller)
+        self.output_box.grid(row = 2, column = 0, padx = 10, pady = 10, sticky="nsew")
+
+        update_btn = ttk.Button(
+            self, 
+            text="Change Output Text", 
+            command=lambda: self.trigger_text_change()
+        )
+        update_btn.grid(row = 3, column = 0, pady = 10)
+
+    def trigger_text_change(self, text):
+        self.output_box.update_display_text(text)
+
+    def get_log_files(file_path):
+        with open(file_path, "r", encoding="utf-8") as file:
+            content = file.read()
+
+        return content
+
+    def open_file_dialogue(self):
+        file_path = filedialog.askopenfilename(
+        title="Select a file")
+    
+        if file_path:
+            print(f"Selected file: {file_path}")
+        else:
+            print("No file selected.")
+
+        base_path = os.getcwd()
+
+        check_structure.Check(filename = file_path,
+                              no_restructure=True,
+                              file_type = "default",
+                              automatic_start=True)
+        
+        with open(base_path+"/dbimporter.logger.details.log", "r", encoding="utf-8") as file:
+            content = file.read()
+
+        #print(content)
+
+        self.trigger_text_change(content)
+
+        
+        
+
+        
+
+
+class Output(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-		
-		# label of frame Layout 2
-        label = ttk.Label(self, text ="All characters", font = LARGEFONT)
-		
-		# putting the grid in its place by using
-		# grid
-        label.grid(row = 0, column = 4, padx = 10, pady = 10)
+        self.config(relief="groove", borderwidth=2) 
+        
+        self.display_text = tk.StringVar()
+        self.display_text.set("Original Output Text")
+        
+        label = ttk.Label(self, textvariable=self.display_text, font = LARGEFONT)
+        label.grid(row = 0, column = 0, padx = 10, pady = 10)
+
+    def update_display_text(self, new_text):
+        self.display_text.set(new_text)
+
 
 def start_gui():
     app = Application()
     app.geometry("1000x500")
     app.mainloop()
-
-
