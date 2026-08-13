@@ -49,6 +49,16 @@ class All(tk.Frame):
         self.output_box = Output(self, controller)
         self.output_box.grid(row = 2, column = 0, padx = 10, pady = 10, sticky="nsew")
 
+        fix_button = ttk.Button(
+            self, 
+            text="Fix", 
+            command=self.open_file_dialogue)
+
+        fix_button.grid(row = 3, column = 0, pady = 10)
+
+        output_box2 = Output(self, controller)
+        output_box2.grid(row = 4, column = 0, padx = 10, pady = 10, sticky="nsew")
+
     def trigger_text_change(self, text):
         self.output_box.update_display_text(text)
 
@@ -62,7 +72,8 @@ class All(tk.Frame):
         base_path = os.getcwd()
         file_path = filedialog.askopenfilename(
         title="Select a file")
-    
+
+        
         if file_path:
             print(f"Selected file: {file_path}")
             if file_path == base_path+"/testfile.txt":
@@ -71,12 +82,11 @@ class All(tk.Frame):
             print("No file selected.")
             #file_path = base_path+"/src/dbimporter/data/find_unit_test.xlsx"
 
+        file_data = check_structure.Check(filename = file_path,
+                            no_restructure=True,
+                            file_type = "default",
+                            automatic_start=True)
 
-        check_structure.Check(filename = file_path,
-                              no_restructure=True,
-                              file_type = "default",
-                              automatic_start=True)
-        
         with open(base_path+"/dbimporter.logger.details.log", "r", encoding="utf-8") as file:
             content = file.read()
 
@@ -89,7 +99,7 @@ class Output(tk.Frame):
         self.config(relief="groove", borderwidth=2) 
         
         self.display_text = tk.StringVar()
-        self.display_text.set("Original Output Text")
+        self.display_text.set(" ")
         
         label = ttk.Label(self, textvariable=self.display_text)
         label.grid(row = 0, column = 0, padx = 10, pady = 10)

@@ -67,6 +67,12 @@ class Check():
         self.no_log_colour = no_log_colour
         self.automatic_start = automatic_start
 
+        print(type(self.filename))
+
+        if isinstance(self.filename, tuple):
+            logger.critical(f"No file selected")
+            raise FileExistsError("No file has been selected")
+
         if self.no_log_colour is True:
             set_log_formatter()
 
