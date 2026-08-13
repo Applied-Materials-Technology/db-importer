@@ -2,6 +2,7 @@ import os
 import tkinter as tk 
 from tkinter import ttk
 from tkinter import filedialog
+from tkinter import scrolledtext
 from dbimporter import check_structure
 
 LARGEFONT = ("Verdana", 24) # Reduced slightly for better scaling
@@ -59,6 +60,16 @@ class All(tk.Frame):
         output_box2 = Output(self, controller)
         output_box2.grid(row = 4, column = 0, padx = 10, pady = 10, sticky="nsew")
 
+        # text_widget = scrolledtext.ScrolledText(
+        # #self.frames[All], 
+        # self,
+        # wrap=tk.WORD, 
+        # font=("Arial", 10),
+        # height=10
+        # )
+
+        # text_widget.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
+
     def trigger_text_change(self, text):
         self.output_box.update_display_text(text)
 
@@ -97,11 +108,17 @@ class Output(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.config(relief="groove", borderwidth=2) 
+
+        frame_canvas = tk.Frame(self)
+        frame_canvas.grid(row=2, column=0, pady=(5, 0), sticky='nw')
+        frame_canvas.grid_rowconfigure(0, weight=1)
+        frame_canvas.grid_columnconfigure(0, weight=1)
+        frame_canvas.grid_propagate(False)
         
         self.display_text = tk.StringVar()
         self.display_text.set(" ")
         
-        label = ttk.Label(self, textvariable=self.display_text)
+        label = ttk.Label(self, textvariable=self.display_text, wraplength=900)
         label.grid(row = 0, column = 0, padx = 10, pady = 10)
 
     def update_display_text(self, new_text):
