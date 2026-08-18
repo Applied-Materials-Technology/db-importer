@@ -104,25 +104,57 @@ class All(tk.Frame):
         self.trigger_text_change(content)
 
 
+# class Output(tk.Frame):
+#     def __init__(self, parent, controller):
+#         tk.Frame.__init__(self, parent)
+#         self.config(relief="groove", borderwidth=2) 
+
+#         frame_canvas = tk.Frame(self)
+#         frame_canvas.grid(row=2, column=0, pady=(5, 0), sticky='nw')
+#         frame_canvas.grid_rowconfigure(0, weight=1)
+#         frame_canvas.grid_columnconfigure(0, weight=1)
+#         frame_canvas.grid_propagate(False)
+        
+#         self.display_text = tk.StringVar()
+#         self.display_text.set(" ")
+        
+#         label = ttk.Label(self, textvariable=self.display_text, wraplength=900)
+#         label.grid(row = 0, column = 0, padx = 10, pady = 10)
+
+#     def update_display_text(self, new_text):
+#         self.display_text.set(new_text)
+
 class Output(tk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.config(relief="groove", borderwidth=2) 
+        super().__init__(parent)
+        self.config(relief="groove", borderwidth=2)
 
-        frame_canvas = tk.Frame(self)
-        frame_canvas.grid(row=2, column=0, pady=(5, 0), sticky='nw')
-        frame_canvas.grid_rowconfigure(0, weight=1)
-        frame_canvas.grid_columnconfigure(0, weight=1)
-        frame_canvas.grid_propagate(False)
-        
-        self.display_text = tk.StringVar()
-        self.display_text.set(" ")
-        
-        label = ttk.Label(self, textvariable=self.display_text, wraplength=900)
-        label.grid(row = 0, column = 0, padx = 10, pady = 10)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+
+        self.text_widget = tk.Text(
+            self,
+            wrap="word",
+            height=12,
+            state="disabled",
+            font=("Arial", 10)
+        )
+
+        self.scrollbar = ttk.Scrollbar(
+            self,
+            orient="vertical",
+            command=self.text_widget.yview
+        )
+        self.text_widget.configure(yscrollcommand=self.scrollbar.set)
+
+        self.text_widget.grid(row=0, column=0, sticky="nsew", padx=(5, 0), pady=5)
+        self.scrollbar.grid(row=0, column=1, sticky="ns", pady=5)
 
     def update_display_text(self, new_text):
-        self.display_text.set(new_text)
+        self.text_widget.configure(state="normal")
+        self.text_widget.delete("1.0", "end")
+        self.text_widget.insert("1.0", new_text)
+        self.text_widget.configure(state="disabled")
 
 
 def start_gui():
