@@ -7,22 +7,49 @@ from dbimporter import check_structure
 
 LARGEFONT = ("Verdana", 24) # Reduced slightly for better scaling
 
+# class Application(tk.Tk):
+#     def __init__(self, *args, **kwargs):
+#         tk.Tk.__init__(self, *args, **kwargs)
+        
+#         container = tk.Frame(self)
+#         container.pack(side = "top", fill = "both", expand = True)
+
+#         container.grid_rowconfigure(0, weight = 1)
+#         container.grid_columnconfigure(0, weight = 1)
+
+#         self.frames = {}
+
+#         for page in (All,): 
+#             frame = page(container, self)
+#             self.frames[page] = frame
+#             frame.grid(row = 0, column = 0, sticky ="nsew")
+
+#         self.show_frame(All)
+
 class Application(tk.Tk):
     def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
-        
-        container = tk.Frame(self)
-        container.pack(side = "top", fill = "both", expand = True)
+        super().__init__(*args, **kwargs)
 
-        container.grid_rowconfigure(0, weight = 1)
-        container.grid_columnconfigure(0, weight = 1)
+        self.canvas = tk.Canvas(self)
+        self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.vsb.set)
+
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.vsb.pack(side="right", fill="y")
+
+        self.content = tk.Frame(self.canvas)
+        self.canvas.create_window((0, 0), window=self.content, anchor="nw")
+
+        self.content.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        )
 
         self.frames = {}
-
-        for page in (All,): 
-            frame = page(container, self)
+        for page in (All,):
+            frame = page(self.content, self)
             self.frames[page] = frame
-            frame.grid(row = 0, column = 0, sticky ="nsew")
+            frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame(All)
 
