@@ -86,6 +86,16 @@ class All(tk.Frame):
 
         fix_button.grid(row = 3, column = 0, pady = 10)
 
+        yes_button = ttk.Button(
+            self,
+            text="Yes",
+            command = self.on_yes
+        )
+
+        yes_button.grid(row = 3, column = 2, pady = 10)
+
+        self.bind("Y", lambda event: self.on_yes())
+
         output_box2 = Output(self, controller)
         output_box2.grid(row = 4, column = 0, padx = 10, pady = 10, sticky="nsew")
 
@@ -139,6 +149,9 @@ class All(tk.Frame):
         #self.trigger_text_change(self.file_data.filename)
         #self.file_data.start_fix(sheet_name=None, sheets_data = None, gui=True)
         self.file_data.start_fix(gui=True)
+
+    def on_yes(self):
+        self.trigger_text_change("Starting fix...")
 
 
 # class Output(tk.Frame):
