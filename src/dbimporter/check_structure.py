@@ -330,6 +330,11 @@ class Check():
 
         self.output_message(sheet_names, sheets_data)
 
+    def start_fix(self, sheet_names=None, sheets_data=None, gui=False):
+        if gui == True:
+            sheet_names, sheets_data = self.read_data(self.filename)
+        printer.wrap_text_star("Attempting to resolve issues automatically...")
+        self.issues.check_self(sheet_names, sheets_data, self.filename)
 
     def output_message(self, 
                        sheet_names: dict, 
@@ -347,8 +352,9 @@ class Check():
             if self.no_restructure==False:
                 try_restructure = input("Attempt to resolve issue automatically? (Y/N)\n")
                 if try_restructure.upper() == "Y":
-                    printer.wrap_text_star("Attempting to resolve issues automatically...")
-                    self.issues.check_self(sheet_names, sheets_data, self.filename)
+                    #printer.wrap_text_star("Attempting to resolve issues automatically...")
+                    #self.issues.check_self(sheet_names, sheets_data, self.filename)
+                    self.start_fix(sheet_names, sheets_data, gui=False)
                 else:
                     pass
 

@@ -47,7 +47,7 @@ class Application(tk.Tk):
 
         self.frames = {}
         for page in (All,):
-            frame = page(self.content, self)
+            frame = page(self.content, self, None)
             self.frames[page] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
@@ -58,8 +58,9 @@ class Application(tk.Tk):
         frame.tkraise()
 
 class All(tk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, file_data):
         tk.Frame.__init__(self, parent)
+        self.file_data = None
         
         label = ttk.Label(self, text ="DBImporter", font = LARGEFONT)
         label.grid(row = 0, column = 0, padx = 10, pady = 10)
@@ -80,7 +81,8 @@ class All(tk.Frame):
         fix_button = ttk.Button(
             self, 
             text="Fix", 
-            command=self.open_file_dialogue)
+            #command=self.open_file_dialogue
+            command = self.fix_file)
 
         fix_button.grid(row = 3, column = 0, pady = 10)
 
@@ -125,10 +127,18 @@ class All(tk.Frame):
                             file_type = "default",
                             automatic_start=True)
 
+        self.file_data = file_data
+
         with open(base_path+"/dbimporter.logger.details.log", "r", encoding="utf-8") as file:
             content = file.read()
 
         self.trigger_text_change(content)
+
+    def fix_file(self):
+
+        #self.trigger_text_change(self.file_data.filename)
+        #self.file_data.start_fix(sheet_name=None, sheets_data = None, gui=True)
+        self.file_data.start_fix(gui=True)
 
 
 # class Output(tk.Frame):
