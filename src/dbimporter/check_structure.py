@@ -55,7 +55,8 @@ class Check():
                  file_type = None,
                  expected_json = None,
                  no_log_colour: bool = False,
-                 automatic_start: bool = True):
+                 automatic_start: bool = True,
+                 prompt_func=None):
         
         self.filename = filename
         self.console_loglevel = self.loglevelcheck(console_loglevel)
@@ -66,6 +67,7 @@ class Check():
         self.expected_json = expected_json
         self.no_log_colour = no_log_colour
         self.automatic_start = automatic_start
+        self.prompt_func = prompt_func or input
 
         print(type(self.filename))
 
@@ -330,10 +332,13 @@ class Check():
 
         self.output_message(sheet_names, sheets_data)
 
-    def start_fix(self, sheet_names=None, sheets_data=None, gui=False):
+    def start_fix(self, sheet_names=None, sheets_data=None, gui=False, prompt_func=None):
+        if prompt_func is not None:
+            self.prompt_func = prompt_func
         if gui == True:
             sheet_names, sheets_data = self.read_data(self.filename)
         printer.wrap_text_star("Attempting to resolve issues automatically...")
+        self.issues.prompt_func = self.prompt_func
         self.issues.check_self(sheet_names, sheets_data, self.filename)
 
     def output_message(self, 
@@ -350,11 +355,13 @@ class Check():
             printer.wrap_text_star("output/output.txt generated for overview results")
             printer.wrap_text_star("See dbimporter.logger.details.log for details about report")
             if self.no_restructure==False:
-                try_restructure = input("Attempt to resolve issue automatically? (Y/N)\n")
+                try_restructure = self.prompt_func(
+                    "Attempt to resolve issue automatically? (Y/N)\n"
+                )
                 if try_restructure.upper() == "Y":
                     #printer.wrap_text_star("Attempting to resolve issues automatically...")
                     #self.issues.check_self(sheet_names, sheets_data, self.filename)
-                    self.start_fix(sheet_names, sheets_data, gui=False)
+                    self.start_fix(sheet_names, sheets_data, gui=False, prompt_func=self.prompt_func)
                 else:
                     pass
 

@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from tkinter import scrolledtext
+from tkinter import messagebox, simpledialog
 from dbimporter import check_structure
 
 LARGEFONT = ("Verdana", 24) # Reduced slightly for better scaling
@@ -118,6 +119,10 @@ class All(tk.Frame):
 
         return content
 
+    def ask_user(self, question):
+        answer = simpledialog.askstring("DBImporter", question, parent=self)
+        return (answer or "N").strip().upper()
+
     def open_file_dialogue(self):
         base_path = os.getcwd()
         file_path = filedialog.askopenfilename(
@@ -145,10 +150,14 @@ class All(tk.Frame):
         self.trigger_text_change(content)
 
     def fix_file(self):
+        if self.file_data is None:
+            messagebox.showerror(
+                "No file selected",
+                "Please select a file before fixing."
+            )
+            return
 
-        #self.trigger_text_change(self.file_data.filename)
-        #self.file_data.start_fix(sheet_name=None, sheets_data = None, gui=True)
-        self.file_data.start_fix(gui=True)
+        self.file_data.start_fix(gui=True, prompt_func=self.ask_user)
 
     def on_yes(self):
         self.trigger_text_change("Starting fix...")

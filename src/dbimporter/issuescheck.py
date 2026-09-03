@@ -141,7 +141,8 @@ class Issues():
         if self.output_type.new_filename is None:
             self.output_type.new_filename = Path("restructure_attempt.xlsx")
 
-        self.output_type.set_up_file()
+        prompt_func = getattr(self, "prompt_func", input)
+        self.output_type.set_up_file(prompt_func=prompt_func)
 
         self.output_type.set_data()
         self.sheet_name()
