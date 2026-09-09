@@ -31,7 +31,7 @@ class Default():
         
 
 
-    def set_up_file(self):
+    def set_up_file(self, prompt_func=input):
 
         """
         Checks if the file name used to write the fixed structure to already exists. Warns
@@ -43,14 +43,16 @@ class Default():
         if not exists:
             pass
         else:
-            change_filename = input(f"File {self.new_filename} already exists. Contents will be overwritten. Press Y to give alternative filename\n")
+            change_filename = prompt_func(
+                f"File {self.new_filename} already exists. Contents will be overwritten. Press Y to give alternative filename\n"
+            )
             if change_filename.upper() == "Y":
                 print("******* Attempting to resolve issues automatically... *******")
-                new_filename = input("Enter new filename")
+                new_filename = prompt_func("Enter new filename")
                 if new_filename[-5:] != ".xlsx":
                     new_filename = new_filename + ".xlsx"
                 self.new_filename = new_filename
-                self.set_up_file()
+                self.set_up_file(prompt_func=prompt_func)
             else:
                 pass
 
