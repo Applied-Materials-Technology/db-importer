@@ -178,7 +178,7 @@ class Default():
                 Write new dataframe to a new Excel file
 
         """
-
+        print("do i not get here?")
         with pd.ExcelWriter(self.new_filename) as writer:
             data.to_excel(writer, sheet_name = sheet_name)
 
