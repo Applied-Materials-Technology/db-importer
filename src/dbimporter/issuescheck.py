@@ -139,7 +139,10 @@ class Issues():
         
 
         if self.output_type.new_filename is None:
-            self.output_type.new_filename = Path("restructure_attempt.xlsx")
+            input_path = Path(self.output_type.filename)
+            self.output_type.new_filename = (
+                input_path.parent / f"{input_path.stem}_fixed.xlsx"
+            )
 
         prompt_func = getattr(self, "prompt_func", input)
         self.output_type.set_up_file(prompt_func=prompt_func)
