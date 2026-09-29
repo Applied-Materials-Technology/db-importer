@@ -114,7 +114,20 @@ class All(tk.Frame):
             )
             return
 
-        self.file_data.start_fix(gui=True, prompt_func=self.ask_user)
+        fixed = self.file_data.start_fix(gui=True, prompt_func=self.ask_user)
+        output_path = self.file_data.issues.output_type.new_filename
+        if fixed:
+            messagebox.showinfo(
+                "Fix complete",
+                f"Fixed file generated:\n{output_path}",
+                parent=self,
+            )
+        else:
+            messagebox.showerror(
+                "Fix failed",
+                "Could not resolve the detected issues.",
+                parent=self,
+            )
 
 
 

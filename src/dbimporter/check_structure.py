@@ -341,6 +341,14 @@ class Check():
         self.issues.prompt_func = self.prompt_func
         self.issues.check_self(sheet_names, sheets_data, self.filename)
 
+        output_path = Path(self.issues.output_type.new_filename)
+        if output_path.is_file():
+            printer.wrap_text_star(f"Fixed file generated: {output_path}")
+            return True
+
+        printer.wrap_text_star("Could not resolve...")
+        return False
+
     def output_message(self, 
                        sheet_names: dict, 
                        sheets_data: pd.core.frame.DataFrame):
