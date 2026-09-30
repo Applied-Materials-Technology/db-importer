@@ -1,13 +1,15 @@
-# import gui
-# import tkinter as tk 
-# from tkinter import ttk
+import gui
+import tkinter as tk 
+from tkinter import ttk
+from dbimporter import *
 
-# # def start_dbgui():
-# #     print("starting gui from dbimporter")
-# #     gui.gui.start_gui()
+def start_dbgui():
+    print("starting gui from dbimporter")
+    gui.gui.start_gui()
 
 # def start_dbgui():
 #     app = gui.gui.Application()
 #     app.geometry("1000x500")
 #     app.mainloop()
 
+# start_dbgui()
