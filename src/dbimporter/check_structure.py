@@ -274,7 +274,7 @@ class Check():
             try:
                 expect_col_names = self.expected_json[jsoncolsdata]
             except AttributeError:
-                logger.debug(f"still in testing mode: sheet names have no associated data")
+                logger.debug(f"sheet names have no associated data")
                 expect_col_names = ["Entry", "Material", "Heat", "Product", "Sub-product", "Test_Lab", "Specimen ID", "Internal ID"]
 
             self.issues.check_column_names(data_column_name, expect_col_names, i)
