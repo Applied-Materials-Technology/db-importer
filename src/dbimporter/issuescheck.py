@@ -40,6 +40,7 @@ class Issues():
                  sheet1_columns: bool = None,
                  units: bool = None,
                  missing_units: dict = None,
+                 mismatched_units: dict = None,
                  file_overwrite: bool = False,
                  general_output: str = None):
         
@@ -48,6 +49,7 @@ class Issues():
         self.sheet1_columns = sheet1_columns
         self.units = units
         self.missing_units = missing_units
+        self.mismatched_units = mismatched_units
         self.file_overwrite = file_overwrite
         self.general_output = general_output
 
@@ -224,10 +226,12 @@ class Issues():
     def check_units_nan(self, 
                         columnname: str, 
                         unitlist: list, 
-                        sheet_name: str):
+                        sheet_name: str,
+                        expected_units: list = None):
 
         """
-        Check if there are any nan units, checks box if there are none
+        Check if there are any nan units, checks box if there are none.
+        If expected_units is provided, compare actual units against them.
 
 
         Parameters
@@ -239,6 +243,9 @@ class Issues():
                 The units that that are expected to be in the df
             sheet_name: str
                 The name of the sheet being looked at
+            expected_units: list
+                The units expected for each column, e.g. from
+                expected_json["column_units"]. Skipped if None.
 
         """
 
@@ -265,6 +272,26 @@ class Issues():
             self.units = True
         else:
             logger.error("Unit existence check could not be determined")
+            self.units = False
+
+        if expected_units is None:
+            return
+
+        if len(unitlist) != len(expected_units):
+            logger.error(f"Unit count mismatch in sheet {sheet_name}, expected {expected_units}, got {list(unitlist)}")
+            self.units = False
+            return
+
+        mismatched = []
+        for col, actual, expected in zip(columnname, unitlist, expected_units):
+            if pd.isna(actual):
+                continue
+            if str(actual).strip() != str(expected).strip():
+                mismatched.append(col)
+                logger.error(f"Wrong unit for column {col} in sheet {sheet_name}: got '{actual}', expected '{expected}'")
+
+        if mismatched:
+            self.mismatched_units = mismatched
             self.units = False
 
 
@@ -298,6 +325,7 @@ def fix_file(filename: Path,
     issues.sheet1_columns = issues_json["sheet1_columns"]
     issues.units = issues_json["units"]
     issues.missing_units = issues_json["missing_units"]
+    issues.mismatched_units = issues_json.get("mismatched_units")
 
 
     if filename.lower().endswith('.csv'):

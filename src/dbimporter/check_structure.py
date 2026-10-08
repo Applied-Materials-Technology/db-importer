@@ -281,7 +281,8 @@ class Check():
 
             try:
                 unit_check = self.read_columns(1, sheets_data[i])
-                self.issues.check_units_nan(data_column_name, unit_check, i)
+                expected_units = self.expected_json.get("column_units")
+                self.issues.check_units_nan(data_column_name, unit_check, i, expected_units)
                 unit_data = sheets_data[i].set_index(['Category'])
                 units = [k for k in unit_data.xs("Unit")]
             except (IndexError, KeyError): # may need to capture more errors...
