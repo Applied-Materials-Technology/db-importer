@@ -41,6 +41,8 @@ class Issues():
                  units: bool = None,
                  missing_units: dict = None,
                  mismatched_units: dict = None,
+                 time_monotonic: bool = None,
+                 time_monotonic_issues: dict = None,
                  file_overwrite: bool = False,
                  general_output: str = None):
         
@@ -50,6 +52,8 @@ class Issues():
         self.units = units
         self.missing_units = missing_units
         self.mismatched_units = mismatched_units
+        self.time_monotonic = time_monotonic
+        self.time_monotonic_issues = time_monotonic_issues
         self.file_overwrite = file_overwrite
         self.general_output = general_output
 
@@ -294,6 +298,66 @@ class Issues():
             self.mismatched_units = mismatched
             self.units = False
 
+    def check_time_monotonic(self,
+                             sheet_data,
+                             sheet_name: str):
+        """
+        If the sheet has a "time" column, check values strictly
+        increase going down the column.
+
+        Skips (passes) sheets with no time column. Coerces to
+        numeric so a leading units row like "(s)" is ignored.
+
+        Parameters
+        ----------
+
+            sheet_data:
+                DataFrame parsed from the sheet being checked
+            sheet_name: str
+                The name of the sheet being looked at
+        """
+
+        time_col = None
+        for col in sheet_data.columns:
+            if str(col).strip().lower() == "time":
+                time_col = col
+                break
+
+        if time_col is None:
+            logger.info(f"No time column in sheet {sheet_name}, skipping time check")
+            self.time_monotonic = True
+            return
+
+        numeric = pd.to_numeric(sheet_data[time_col], errors="coerce").dropna()
+        values = numeric.values
+
+        if len(values) < 2:
+            logger.error(f"Not enough numeric time values in sheet {sheet_name} to check increase")
+            self.time_monotonic = False
+            self.time_monotonic_issues = {sheet_name: "insufficient numeric values"}
+            return
+
+        bad_idx = None
+        for pos in range(1, len(values)):
+            if not values[pos] > values[pos - 1]:
+                bad_idx = pos
+                break
+
+        if bad_idx is not None:
+            prev_row = numeric.index[bad_idx - 1]
+            curr_row = numeric.index[bad_idx]
+            logger.error(
+                f"Time does not increase in sheet {sheet_name}: "
+                f"{values[bad_idx - 1]} (row {prev_row}) -> {values[bad_idx]} (row {curr_row})"
+            )
+            self.time_monotonic = False
+            self.time_monotonic_issues = {
+                sheet_name: f"row {curr_row} value {values[bad_idx]} <= row {prev_row} value {values[bad_idx - 1]}"
+            }
+        else:
+            logger.info(f"Time values increase correctly in sheet {sheet_name}")
+            self.time_monotonic = True
+
 
 def fix_file(filename: Path, 
              issuesfile: Path):
@@ -326,6 +390,8 @@ def fix_file(filename: Path,
     issues.units = issues_json["units"]
     issues.missing_units = issues_json["missing_units"]
     issues.mismatched_units = issues_json.get("mismatched_units")
+    issues.time_monotonic = issues_json.get("time_monotonic")
+    issues.time_monotonic_issues = issues_json.get("time_monotonic_issues")
 
 
     if filename.lower().endswith('.csv'):

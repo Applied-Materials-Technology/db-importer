@@ -288,6 +288,8 @@ class Check():
             except (IndexError, KeyError): # may need to capture more errors...
                 logger.error(f"Units could not be found in sheet {i}")
 
+            self.issues.check_time_monotonic(sheets_data[i], i)
+
         self.write_results(sheet_names, sheets_data)
 
 

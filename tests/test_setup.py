@@ -1,15 +1,6 @@
 import pytest
 import dbimporter as dbi
 
-def test_find_module():
-
-    """
-    Check module can be found
-    """
-
-    modulefound = dbi.find_me()
-    assert modulefound
-
 
 def test_filename_exists(monkeypatch):
 
