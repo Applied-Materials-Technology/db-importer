@@ -1,7 +1,0 @@
-check_structure
----------------
-
-.. automodule:: src.dbimporter.check_structure
-   :members:
-   :undoc-members:
-   :show-inheritance:
