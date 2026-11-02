@@ -78,7 +78,7 @@ class All(tk.Frame):
 
     def ask_user(self, question):
         answer = simpledialog.askstring("DBImporter", question, parent=self)
-        return (answer or "N").strip().upper()
+        return answer
 
     def open_file_dialogue(self):
         base_path = os.getcwd()
