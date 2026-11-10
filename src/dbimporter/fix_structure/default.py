@@ -43,18 +43,17 @@ class Default():
         if not exists:
             pass
         else:
-            change_filename = prompt_func(
-                f"File {self.new_filename} already exists. Contents will be overwritten. Press Y to give alternative filename\n"
+            new_filename = prompt_func(
+                f"File {self.new_filename} already exists. Contents will be overwritten.\n"
+                f"Enter a new filename (or leave blank to overwrite): "
             )
-            if change_filename.upper() == "Y":
-                print("******* Attempting to resolve issues automatically... *******")
-                new_filename = prompt_func("Enter new filename")
+            if new_filename and str(new_filename).strip():
+                new_filename = str(new_filename).strip()
                 if new_filename[-5:] != ".xlsx":
                     new_filename = new_filename + ".xlsx"
                 self.new_filename = new_filename
                 self.set_up_file(prompt_func=prompt_func)
-            else:
-                pass
+            # left blank or cancelled → keep current filename (will overwrite)
 
 
     def read_data(self):
