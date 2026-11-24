@@ -74,7 +74,7 @@ def test_change_filelogpass(monkeypatch, x, expected):
 
     monkeypatch.setattr('builtins.input', lambda _: "N")
     check = dbi.check_structure.Check(filename="src/dbimporter/data/baddata.xlsx", file_loglevel = x)
-    assert check.file_loglevel == expected
+    assert check.file_log_level == expected
 
 @pytest.mark.xfail(strict=True)
 @pytest.mark.parametrize("x ,expected", errordata)
